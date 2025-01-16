@@ -11,6 +11,7 @@ function Navbar() {
   const token = localStorage.getItem('token');
 
   const navItems = [
+    { label: 'Home', path: '/home' },
     { label: 'Dashboard', path: '/dashboard' },
     token 
       ? { label: 'Logout', path: '#', onClick: () => {
@@ -23,7 +24,7 @@ function Navbar() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md">
+    <nav className={`fixed top-0 left-0 right-0 z-50 ${location.pathname === '/' ? 'bg-transparent' : 'bg-white/80 backdrop-blur-md shadow-lg'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex-shrink-0">
@@ -46,8 +47,8 @@ function Navbar() {
                     onClick={item.onClick}
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors hover-effect flex items-center gap-2
                       ${isActive(item.path) 
-                        ? 'text-brand-green' 
-                        : 'text-gray-300 hover:text-white'}`}
+                        ? 'text-[#2196F3]' 
+                        : 'text-[#4A628A] hover:text-[#2196F3]'}`}
                   >
                     {item.icon && <item.icon size={18} />}
                     {item.label}
@@ -60,7 +61,7 @@ function Navbar() {
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-400 hover:text-white hover-effect"
+              className="text-[#4A628A] hover:text-[#2196F3] hover-effect"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -73,7 +74,7 @@ function Navbar() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden bg-black/95 backdrop-blur-md"
+          className="md:hidden bg-white shadow-lg"
         >
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navItems.map((item) => (
@@ -86,8 +87,8 @@ function Navbar() {
                 }}
                 className={`block px-3 py-2 rounded-md text-base font-medium hover-effect flex items-center gap-2
                   ${isActive(item.path)
-                    ? 'text-brand-green'
-                    : 'text-gray-300 hover:text-white'}`}
+                    ? 'text-[#2196F3]'
+                    : 'text-[#4A628A] hover:text-[#2196F3]'}`}
               >
                 {item.icon && <item.icon size={18} />}
                 {item.label}

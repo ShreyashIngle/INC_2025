@@ -1,26 +1,34 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'], // Ensures Tailwind scans the correct files
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Montserrat', 'sans-serif'], // Custom font family
+        sans: ['Montserrat', 'sans-serif'],
       },
       colors: {
         brand: {
-          green: '#95C11E', // Nested 'brand' object for clarity
+          blue: {
+            light: '#DFF2EB',
+            medium: '#B9E5E8',
+            dark: '#7AB2D3',
+            darker: '#4A628A',
+          }
         },
       },
       animation: {
-        'scroll-x': 'scroll-x 40s linear infinite', // Custom animation utility
+        'scroll-x': 'scroll-x 40s linear infinite',
       },
       keyframes: {
         'scroll-x': {
-          from: { transform: 'translateX(0)' }, // Keyframe definition
+          from: { transform: 'translateX(0)' },
           to: { transform: 'translateX(-100%)' },
         },
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+      },
     },
   },
-  plugins: [], // Empty plugins array; add plugins here if needed
+  plugins: [],
 };

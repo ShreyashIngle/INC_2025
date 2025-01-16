@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html {
@@ -13,19 +13,19 @@ html {
 }
 
 body {
-  @apply bg-black text-white font-sans antialiased;
+  @apply bg-white text-[#4A628A] font-sans antialiased;
 }
 
 ::selection {
-  @apply bg-white text-brand-green;
+  @apply bg-[#2196F3] text-white;
 }
 
 ::-webkit-scrollbar {
-  @apply w-2 bg-brand-green;
+  @apply w-2 bg-[#B9E5E8];
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-white rounded-full;
+  @apply bg-[#4A628A] rounded-full;
 }
 
 @keyframes scroll {
@@ -42,9 +42,9 @@ body {
 }
 
 .hover-glow:hover {
-  text-shadow: 0 0 10px theme('colors.brand.green'),
-               0 0 20px theme('colors.brand.green'),
-               0 0 30px theme('colors.brand.green');
+  text-shadow: 0 0 10px theme('colors.brand.blue.darker'),
+               0 0 20px theme('colors.brand.blue.darker'),
+               0 0 30px theme('colors.brand.blue.darker');
 }
 
 .glow {
@@ -73,6 +73,6 @@ a, button, .interactive {
 }
 
 .card-hover:hover {
-  @apply shadow-xl shadow-brand-green/20;
+  @apply shadow-xl shadow-brand-blue-dark/20;
   transform: translateY(-5px) scale(1.02);
 }

@@ -16,13 +16,13 @@ function Cursor() {
     };
 
     const handleHover = () => {
-      cursor.classList.add('scale-[3]', 'border-white', 'bg-transparent');
-      cursor.classList.remove('scale-100', 'border-0', 'bg-brand-green');
+      cursor.classList.add('scale-[3]', 'border-[#2196F3]', 'bg-transparent');
+      cursor.classList.remove('scale-100', 'border-0', 'bg-[#2196F3]');
     };
 
     const handleUnhover = () => {
-      cursor.classList.remove('scale-[3]', 'border-white', 'bg-transparent');
-      cursor.classList.add('scale-100', 'border-0', 'bg-brand-green');
+      cursor.classList.remove('scale-[3]', 'border-[#2196F3]', 'bg-transparent');
+      cursor.classList.add('scale-100', 'border-0', 'bg-[#2196F3]');
     };
 
     document.addEventListener('mousemove', moveCursor);
@@ -46,11 +46,11 @@ function Cursor() {
     <>
       <div
         ref={cursorRef}
-        className="fixed w-5 h-5 rounded-full pointer-events-none z-50 transition-transform duration-150 ease-out -translate-x-1/2 -translate-y-1/2 bg-brand-green"
+        className="fixed w-5 h-5 rounded-full pointer-events-none z-50 transition-transform duration-150 ease-out -translate-x-1/2 -translate-y-1/2 bg-[#2196F3]"
       />
       <div
         ref={cursorBlurRef}
-        className="fixed w-[500px] h-[500px] rounded-full pointer-events-none z-10 bg-brand-green/30 blur-[80px] transition-transform duration-300"
+        className="fixed w-[500px] h-[500px] rounded-full pointer-events-none z-10 bg-[#2196F3]/30 blur-[80px] transition-transform duration-300"
       />
     </>
   );

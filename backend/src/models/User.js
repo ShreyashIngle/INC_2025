@@ -18,6 +18,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  leetcodeUsername: {
+    type: String,
+    required: true,
+    trim: true
+  },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   githubId: String,
