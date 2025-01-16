@@ -46,7 +46,7 @@ function Features() {
   const isInView = useInView(ref, { once: true });
 
   return (
-    <section ref={ref} className="py-24 bg-gradient-to-b from-[#DFF2EB] to-[#B9E5E8]">
+    <section ref={ref} className="py-24 bg-gradient-to-b  bg-[#091c2f]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}

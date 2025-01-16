@@ -7,8 +7,6 @@ import {
   BookOpen,
   Code,
   Trophy,
-  Target,
-  Calendar,
   TrendingUp
 } from 'lucide-react';
 
@@ -26,7 +24,7 @@ function Dashboard() {
     const fetchLeetCodeData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const username = 'YOUR_USERNAME'; // Get this from user context/state
+        const username = 'YOUR_USERNAME'; // Replace with dynamic username logic
 
         const headers = {
           Authorization: `Bearer ${token}`
@@ -82,14 +80,14 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-20 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-[#2196F3]"></div>
+      <div className="min-h-screen pt-20 flex items-center justify-center bg-dark-blue">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-[#FFD700]"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pt-20 bg-gradient-to-b from-[#DFF2EB] via-[#B9E5E8] to-[#7AB2D3]">
+    <div className="min-h-screen pt-20 bg-[#091c2f]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
           {stats.map((stat, index) => (
@@ -98,13 +96,13 @@ function Dashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white rounded-2xl p-6 shadow-lg"
+              className="bg-[#05111b] text-white rounded-2xl p-6 shadow-lg"
             >
               <div className="flex items-center justify-between mb-4">
-                <stat.icon className="w-8 h-8 text-[#2196F3]" />
-                <span className="text-3xl font-bold text-[#4A628A]">{stat.value}</span>
+                <stat.icon className="w-8 h-8 text-[#FFD700]" />
+                <span className="text-3xl font-bold">{stat.value}</span>
               </div>
-              <h3 className="text-[#4A628A] font-medium">{stat.label}</h3>
+              <h3 className="font-medium">{stat.label}</h3>
             </motion.div>
           ))}
         </div>
@@ -114,19 +112,19 @@ function Dashboard() {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white rounded-2xl p-6 shadow-lg"
+            className="bg-[#05111b] text-white rounded-2xl p-6 shadow-lg"
           >
-            <h2 className="text-xl font-bold text-[#4A628A] mb-4 flex items-center">
-              <BookOpen className="w-6 h-6 mr-2 text-[#2196F3]" />
+            <h2 className="text-xl font-bold mb-4 flex items-center">
+              <BookOpen className="w-6 h-6 mr-2 text-[#FFD700]" />
               Recent Submissions
             </h2>
             <div className="space-y-4">
               {leetcodeData.submissions?.submissions?.slice(0, 5).map((submission, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-xl"
+                  className="flex items-center justify-between p-4 bg-[#012A44] rounded-xl"
                 >
-                  <span className="text-[#4A628A] font-medium">{submission.title}</span>
+                  <span className="font-medium">{submission.title}</span>
                   <span className={`px-3 py-1 rounded-full text-sm ${
                     submission.statusDisplay === 'Accepted'
                       ? 'bg-green-100 text-green-800'
@@ -143,22 +141,22 @@ function Dashboard() {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white rounded-2xl p-6 shadow-lg"
+            className="bg-[#05111b] text-white rounded-2xl p-6 shadow-lg"
           >
-            <h2 className="text-xl font-bold text-[#4A628A] mb-4 flex items-center">
-              <TrendingUp className="w-6 h-6 mr-2 text-[#2196F3]" />
+            <h2 className="text-xl font-bold mb-4 flex items-center">
+              <TrendingUp className="w-6 h-6 mr-2 text-[#FFD700]" />
               Contest Performance
             </h2>
             <div className="space-y-4">
               {leetcodeData.contests?.contestHistory?.slice(0, 5).map((contest, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-xl"
+                  className="flex items-center justify-between p-4 bg-[#012A44] rounded-xl"
                 >
-                  <span className="text-[#4A628A] font-medium">{contest.contestName}</span>
+                  <span className="font-medium">{contest.contestName}</span>
                   <div className="flex items-center space-x-4">
-                    <span className="text-[#4A628A]">Rank: {contest.ranking}</span>
-                    <span className="text-[#2196F3]">Rating: {contest.rating}</span>
+                    <span>Rank: {contest.ranking}</span>
+                    <span className="text-[#FFD700]">Rating: {contest.rating}</span>
                   </div>
                 </div>
               ))}

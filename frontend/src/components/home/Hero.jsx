@@ -17,7 +17,7 @@ function Hero() {
         />
       </video>
       
-      <div className="absolute inset-0 bg-[#4A628A]/60 z-10" />
+      <div className="absolute inset-0  bg-[#091c2f]/60 z-10" />
       
       <div className="relative z-20 text-center px-4 sm:px-6 lg:px-8">
         <motion.h1
@@ -71,3 +71,5 @@ function Hero() {
     </div>
   );
 }
+
+export default Hero;
