@@ -5,7 +5,7 @@ import { sendResetPasswordEmail } from '../utils/email.js';
 
 export const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, leetcodeUsername } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -14,11 +14,28 @@ export const register = async (req, res) => {
     }
 
     // Create new user
-    const user = new User({ name, email, password });
+    const user = new User({
+      name,
+      email,
+      password,
+      leetcodeUsername
+    });
+    
     await user.save();
 
-    res.status(201).json({ message: 'User registered successfully' });
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    res.status(201).json({ 
+      message: 'User registered successfully',
+      token
+    });
   } catch (error) {
+    console.error('Registration error:', error);
     res.status(500).json({ message: 'Registration failed' });
   }
 };
@@ -46,8 +63,17 @@ export const login = async (req, res) => {
       { expiresIn: '24h' }
     );
 
-    res.json({ token });
+    res.json({ 
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        leetcodeUsername: user.leetcodeUsername
+      }
+    });
   } catch (error) {
+    console.error('Login error:', error);
     res.status(500).json({ message: 'Login failed' });
   }
 };
@@ -76,6 +102,7 @@ export const forgotPassword = async (req, res) => {
 
     res.json({ message: 'Password reset email sent' });
   } catch (error) {
+    console.error('Forgot password error:', error);
     res.status(500).json({ message: 'Failed to send reset email' });
   }
 };
@@ -107,6 +134,7 @@ export const resetPassword = async (req, res) => {
 
     res.json({ message: 'Password reset successful' });
   } catch (error) {
+    console.error('Reset password error:', error);
     res.status(500).json({ message: 'Password reset failed' });
   }
 };

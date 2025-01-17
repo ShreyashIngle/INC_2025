@@ -21,8 +21,9 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/auth/register', formData);
-      toast.success('Registration successful! Please login.');
+      const response = await axios.post('http://localhost:5000/api/auth/register', formData);
+      localStorage.setItem('token', response.data.token);
+      toast.success('Registration successful!');
       navigate('/login');
     } catch (error) {
       toast.error(error.response?.data?.message || 'Registration failed');
@@ -30,13 +31,13 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen pt-20 bg-gradient-to-b from-[#DFF2EB] to-[#7AB2D3] flex items-center justify-center px-4">
+    <div className="min-h-screen pt-20 bg-gradient-to-b from-[#091c2f] to-[#4A628A] flex items-center justify-center px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="bg-white rounded-[2rem] shadow-xl overflow-hidden max-w-3xl w-full flex"
       >
-        <div className="hidden md:block w-1/2 bg-[#4A628A] p-8 text-white rounded-l-[2rem]">
+        <div className="hidden md:block w-1/2 bg-[#091c2f] p-8 text-white rounded-l-[2rem]">
           <div className="h-full flex flex-col justify-center items-center text-center">
             <h2 className="text-4xl font-bold mb-6">Already signed?</h2>
             <p className="text-lg mb-12">
@@ -44,7 +45,7 @@ function Signup() {
             </p>
             <Link
               to="/login"
-              className="inline-block border-2 border-white text-white px-12 py-4 rounded-xl hover:bg-white hover:text-[#4A628A] transition-colors text-center font-semibold"
+              className="inline-block border-2 border-white text-white px-12 py-4 rounded-xl hover:bg-[#2196F3] hover:border-[#2196F3] transition-colors text-center font-semibold"
             >
               SIGN IN
             </Link>

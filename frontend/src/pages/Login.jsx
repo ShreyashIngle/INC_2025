@@ -19,28 +19,40 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', formData);
-      localStorage.setItem('token', response.data.token);
-      toast.success('Login successful!');
-      navigate('/dashboard');
+      const response = await axios.post('http://localhost:5000/api/auth/login', formData, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      });
+      
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        toast.success('Login successful!');
+        navigate('/dashboard');
+      } else {
+        throw new Error('Login failed - no token received');
+      }
     } catch (error) {
+      console.error('Login error:', error);
       toast.error(error.response?.data?.message || 'Login failed');
     }
   };
 
   return (
-    <div className="min-h-screen pt-20 bg-gradient-to-b from-black to-gray-900 flex items-center justify-center px-4">
+    <div className="min-h-screen pt-20 bg-gradient-to-b from-[#091c2f] to-[#4A628A] flex items-center justify-center px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="bg-white rounded-[2rem] shadow-xl overflow-hidden max-w-4xl w-full flex"
       >
         <div className="w-full md:w-1/2 p-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6">Sign In</h2>
+          <h2 className="text-4xl font-bold text-[#4A628A] mb-6">Sign In</h2>
           
           <div className="flex gap-4 mb-6">
             <button className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
-              <Github className="w-6 h-6 text-gray-900" />
+              <Github className="w-6 h-6 text-[#4A628A]" />
             </button>
             <button className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
               <Linkedin className="w-6 h-6 text-[#0A66C2]" />
@@ -64,7 +76,7 @@ function Login() {
                 placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-green text-gray-900 placeholder-gray-400"
+                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2196F3] text-[#4A628A] placeholder-gray-400"
                 required
               />
             </div>
@@ -76,7 +88,7 @@ function Login() {
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-green text-gray-900 placeholder-gray-400"
+                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2196F3] text-[#4A628A] placeholder-gray-400"
                 required
               />
             </div>
@@ -84,7 +96,7 @@ function Login() {
             <div className="flex items-center justify-end">
               <Link
                 to="/forgot-password"
-                className="text-sm text-gray-600 hover:text-brand-green"
+                className="text-sm text-[#4A628A] hover:text-[#2196F3]"
               >
                 Forgot your password?
               </Link>
@@ -92,14 +104,14 @@ function Login() {
 
             <button
               type="submit"
-              className="w-full bg-gray-900 text-white py-4 rounded-xl hover:bg-gray-800 transition-colors font-semibold"
+              className="w-full bg-[#4A628A] text-white py-4 rounded-xl hover:bg-[#2196F3] transition-colors font-semibold"
             >
               SIGN IN
             </button>
           </form>
         </div>
 
-        <div className="hidden md:block w-1/2 bg-green-900 p-12 text-white">
+        <div className="hidden md:block w-1/2 bg-[#091c2f] p-12 text-white">
           <div className="h-full flex flex-col justify-center items-center text-center">
             <h2 className="text-4xl font-bold mb-6">Hello, Friend!</h2>
             <p className="text-lg mb-12">
@@ -107,7 +119,7 @@ function Login() {
             </p>
             <Link
               to="/signup"
-              className="inline-block border-2 border-white text-white px-12 py-4 rounded-xl hover:bg-white hover:text-emerald-500 transition-colors text-center font-semibold"
+              className="inline-block border-2 border-white text-white px-12 py-4 rounded-xl hover:bg-[#2196F3] hover:border-[#2196F3] transition-colors text-center font-semibold"
             >
               SIGN UP
             </Link>

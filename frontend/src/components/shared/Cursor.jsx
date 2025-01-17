@@ -11,7 +11,7 @@ function Cursor() {
     const moveCursor = (e) => {
       requestAnimationFrame(() => {
         cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-        cursorBlur.style.transform = `translate(${e.clientX - 250}px, ${e.clientY - 250}px)`;
+        cursorBlur.style.transform = `translate(${e.clientX - 250}px, ${e.clientY - 250}px)`; // Adjust blur offset if needed
       });
     };
 
@@ -46,7 +46,7 @@ function Cursor() {
     <>
       <div
         ref={cursorRef}
-        className="fixed w-5 h-5 rounded-full pointer-events-none z-50 transition-transform duration-150 ease-out -translate-x-1/2 -translate-y-1/2 bg-[#2196F3]"
+        className="fixed w-5 h-5 rounded-full pointer-events-none z-50 transition-transform duration-100 ease-out -translate-x-1/2 -translate-y-1/2 bg-[#2196F3]"
       />
       <div
         ref={cursorBlurRef}

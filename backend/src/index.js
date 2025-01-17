@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import passport from 'passport';
 import authRoutes from './routes/auth.js';
+import morgan from 'morgan';
 import './config/passport.js';
 import { sendResetPasswordEmail } from './utils/email.js';
 
@@ -15,7 +16,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(passport.initialize());
-
+app.use(morgan("tiny"));
 // Routes
 app.use('/api/auth', authRoutes);
 
