@@ -9,16 +9,38 @@ const router = express.Router();
 
 // Validation rules
 const registerValidation = [
-  body('name').trim().notEmpty().withMessage('Name is required'),
-  body('email').isEmail().withMessage('Invalid email address'),
+  body('name')
+    .trim()
+    .notEmpty().withMessage('Name is required')
+    .isLength({ min: 2 }).withMessage('Name must be at least 2 characters long'),
+  
+  body('email')
+    .trim()
+    .notEmpty().withMessage('Email is required')
+    .isEmail().withMessage('Invalid email address')
+    .normalizeEmail(),
+  
   body('password')
-    .isLength({ min: 6 })
-    .withMessage('Password must be at least 6 characters long')
+    .trim()
+    .notEmpty().withMessage('Password is required')
+    .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+  
+  body('leetcodeUsername')
+    .trim()
+    .notEmpty().withMessage('LeetCode username is required')
+    .isLength({ min: 1 }).withMessage('LeetCode username is required')
 ];
 
 const loginValidation = [
-  body('email').isEmail().withMessage('Invalid email address'),
-  body('password').notEmpty().withMessage('Password is required')
+  body('email')
+    .trim()
+    .notEmpty().withMessage('Email is required')
+    .isEmail().withMessage('Invalid email address')
+    .normalizeEmail(),
+  
+  body('password')
+    .trim()
+    .notEmpty().withMessage('Password is required')
 ];
 
 // Auth routes
@@ -32,7 +54,7 @@ router.get('/github',
   passport.authenticate('github', { scope: ['user:email'] })
 );
 
-router.get('/github/ callback',
+router.get('/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   (req, res) => {
     const token = jwt.sign(
