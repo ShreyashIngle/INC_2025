@@ -13,20 +13,82 @@ function Signup() {
     password: '',
     leetcodeUsername: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Invalid email format';
+    }
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+    if (!formData.leetcodeUsername.trim()) {
+      newErrors.leetcodeUsername = 'LeetCode username is required';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', formData);
-      localStorage.setItem('token', response.data.token);
-      toast.success('Registration successful!');
-      navigate('/login');
+      const response = await axios.post(
+        'http://localhost:5000/api/auth/register',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
+        }
+      );
+
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        toast.success('Registration successful!');
+        navigate('/dashboard');
+      }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Registration failed');
+      console.error('Registration error:', error);
+      const errorMessage = error.response?.data?.message || 'Registration failed';
+      toast.error(errorMessage);
+      
+      // Handle validation errors from server
+      if (error.response?.data?.errors) {
+        const serverErrors = {};
+        error.response.data.errors.forEach(err => {
+          serverErrors[err.param] = err.msg;
+        });
+        setErrors(serverErrors);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,10 +118,16 @@ function Signup() {
           <h2 className="text-4xl font-bold text-[#4A628A] mb-6">Create Account</h2>
           
           <div className="flex gap-4 mb-6">
-            <button className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+            <button 
+              disabled={loading}
+              className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors disabled:opacity-50"
+            >
               <Github className="w-6 h-6 text-[#4A628A]" />
             </button>
-            <button className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+            <button 
+              disabled={loading}
+              className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors disabled:opacity-50"
+            >
               <Linkedin className="w-6 h-6 text-[#0A66C2]" />
             </button>
           </div>
@@ -81,9 +149,15 @@ function Signup() {
                 placeholder="Name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2196F3] text-[#4A628A] placeholder-gray-400"
+                disabled={loading}
+                className={`w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2196F3] text-[#4A628A] placeholder-gray-400 disabled:opacity-50 ${
+                  errors.name ? 'border-2 border-red-500' : ''
+                }`}
                 required
               />
+              {errors.name && (
+                <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+              )}
             </div>
 
             <div>
@@ -93,9 +167,15 @@ function Signup() {
                 placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2196F3] text-[#4A628A] placeholder-gray-400"
+                disabled={loading}
+                className={`w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2196F3] text-[#4A628A] placeholder-gray-400 disabled:opacity-50 ${
+                  errors.email ? 'border-2 border-red-500' : ''
+                }`}
                 required
               />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+              )}
             </div>
 
             <div>
@@ -105,9 +185,15 @@ function Signup() {
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2196F3] text-[#4A628A] placeholder-gray-400"
+                disabled={loading}
+                className={`w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2196F3] text-[#4A628A] placeholder-gray-400 disabled:opacity-50 ${
+                  errors.password ? 'border-2 border-red-500' : ''
+                }`}
                 required
               />
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+              )}
             </div>
 
             <div>
@@ -117,16 +203,23 @@ function Signup() {
                 placeholder="LeetCode Username"
                 value={formData.leetcodeUsername}
                 onChange={handleChange}
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2196F3] text-[#4A628A] placeholder-gray-400"
+                disabled={loading}
+                className={`w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2196F3] text-[#4A628A] placeholder-gray-400 disabled:opacity-50 ${
+                  errors.leetcodeUsername ? 'border-2 border-red-500' : ''
+                }`}
                 required
               />
+              {errors.leetcodeUsername && (
+                <p className="mt-1 text-sm text-red-500">{errors.leetcodeUsername}</p>
+              )}
             </div>
 
             <button
               type="submit"
-              className="w-full bg-[#4A628A] text-white py-4 rounded-xl hover:bg-[#2196F3] transition-colors font-semibold"
+              disabled={loading}
+              className="w-full bg-[#4A628A] text-white py-4 rounded-xl hover:bg-[#2196F3] transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              SIGN UP
+              {loading ? 'Creating Account...' : 'SIGN UP'}
             </button>
           </form>
         </div>
