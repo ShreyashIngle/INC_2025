@@ -18,7 +18,8 @@ export const register = async (req, res) => {
       name,
       email,
       password,
-      leetcodeUsername
+      leetcodeUsername,
+      role: 'user' // Default role
     });
     
     await user.save();
@@ -32,11 +33,18 @@ export const register = async (req, res) => {
 
     res.status(201).json({ 
       message: 'User registered successfully',
-      token
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        leetcodeUsername: user.leetcodeUsername,
+        role: user.role
+      }
     });
   } catch (error) {
     console.error('Registration error:', error);
-    res.status(500).json({ message: 'Registration failed' });
+    res.status(500).json({ message: 'Registration failed', error: error.message });
   }
 };
 
@@ -69,12 +77,31 @@ export const login = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        leetcodeUsername: user.leetcodeUsername
+        leetcodeUsername: user.leetcodeUsername,
+        role: user.role
       }
     });
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Login failed' });
+  }
+};
+
+export const makeAdmin = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.role = 'admin';
+    await user.save();
+
+    res.json({ message: 'User promoted to admin successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to promote user to admin' });
   }
 };
 
