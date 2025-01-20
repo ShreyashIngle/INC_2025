@@ -8,18 +8,25 @@ import {
   ChevronRight,
   Home,
   Settings,
-  LogOut
+  LogOut,
+  BookOpen,
+  Shield
 } from 'lucide-react';
 
 function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const menuItems = [
     { icon: Home, label: 'Overview', path: '/dashboard' },
     { icon: Code2, label: 'LeetCode Profile', path: '/dashboard/leetcode' },
+    { icon: BookOpen, label: 'DSA Sheet', path: '/dashboard/dsa' },
     { icon: MessageSquare, label: 'Chatbot', path: '/dashboard/chatbot' },
-    { icon: Settings, label: 'Settings', path: '/dashboard/settings' }
+    { icon: Settings, label: 'Settings', path: '/dashboard/settings' },
+    ...(user?.role === 'admin' ? [
+      { icon: Shield, label: 'Admin', path: '/admin/dashboard' }
+    ] : [])
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -58,6 +65,7 @@ function Sidebar() {
           <button
             onClick={() => {
               localStorage.removeItem('token');
+              localStorage.removeItem('user');
               window.location.href = '/login';
             }}
             className="flex items-center gap-4 p-3 rounded-lg w-full text-gray-400 hover:bg-red-500/10 hover:text-red-500 transition-all duration-300"
