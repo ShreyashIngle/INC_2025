@@ -3,7 +3,7 @@ import { body } from 'express-validator';
 import passport from 'passport';
 import * as authController from '../controllers/authController.js';
 import { validate } from '../middleware/validate.js';
-import { authenticate } from '../middleware/auth.js';
+import { authenticate, isAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -49,37 +49,7 @@ router.post('/login', loginValidation, validate, authController.login);
 router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password', authController.resetPassword);
 
-// Social auth routes
-router.get('/github',
-  passport.authenticate('github', { scope: ['user:email'] })
-);
-
-router.get('/github/callback',
-  passport.authenticate('github', { failureRedirect: '/login' }),
-  (req, res) => {
-    const token = jwt.sign(
-      { userId: req.user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' }
-    );
-    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
-  }
-);
-
-router.get('/linkedin',
-  passport.authenticate('linkedin', { scope: ['r_emailaddress', 'r_liteprofile'] })
-);
-
-router.get('/linkedin/callback',
-  passport.authenticate('linkedin', { failureRedirect: '/login' }),
-  (req, res) => {
-    const token = jwt.sign(
-      { userId: req.user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' }
-    );
-    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
-  }
-);
+// Admin routes
+router.post('/make-admin', authenticate, isAdmin, authController.makeAdmin);
 
 export default router;
