@@ -1,6 +1,5 @@
 import express from 'express';
 import { body } from 'express-validator';
-import passport from 'passport';
 import * as authController from '../controllers/authController.js';
 import { validate } from '../middleware/validate.js';
 import { authenticate, isAdmin } from '../middleware/auth.js';
@@ -23,12 +22,7 @@ const registerValidation = [
   body('password')
     .trim()
     .notEmpty().withMessage('Password is required')
-    .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-  
-  body('leetcodeUsername')
-    .trim()
-    .notEmpty().withMessage('LeetCode username is required')
-    .isLength({ min: 1 }).withMessage('LeetCode username is required')
+    .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
 ];
 
 const loginValidation = [
