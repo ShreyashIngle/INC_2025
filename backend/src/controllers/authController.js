@@ -1,11 +1,9 @@
 import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
 import User from '../models/User.js';
-import { sendResetPasswordEmail } from '../utils/email.js';
 
 export const register = async (req, res) => {
   try {
-    const { name, email, password, leetcodeUsername } = req.body;
+    const { name, email, password, role } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -18,8 +16,7 @@ export const register = async (req, res) => {
       name,
       email,
       password,
-      leetcodeUsername,
-      role: 'user' // Default role
+      role: role || 'student'
     });
     
     await user.save();
@@ -38,7 +35,6 @@ export const register = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        leetcodeUsername: user.leetcodeUsername,
         role: user.role
       }
     });
@@ -77,7 +73,6 @@ export const login = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        leetcodeUsername: user.leetcodeUsername,
         role: user.role
       }
     });
@@ -91,7 +86,7 @@ export const makeAdmin = async (req, res) => {
   try {
     const { userId } = req.body;
     const user = await User.findById(userId);
-    
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -99,11 +94,13 @@ export const makeAdmin = async (req, res) => {
     user.role = 'admin';
     await user.save();
 
-    res.json({ message: 'User promoted to admin successfully' });
+    res.json({ message: 'User promoted to admin' });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to promote user to admin' });
+    console.error('Make admin error:', error);
+    res.status(500).json({ message: 'Failed to promote user' });
   }
 };
+
 
 export const forgotPassword = async (req, res) => {
   try {

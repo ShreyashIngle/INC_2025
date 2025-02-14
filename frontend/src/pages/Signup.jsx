@@ -11,7 +11,7 @@ function Signup() {
     name: '',
     email: '',
     password: '',
-    leetcodeUsername: ''
+    role: 'student'
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -31,9 +31,6 @@ function Signup() {
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
-    if (!formData.leetcodeUsername.trim()) {
-      newErrors.leetcodeUsername = 'LeetCode username is required';
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -41,7 +38,6 @@ function Signup() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -63,8 +59,7 @@ function Signup() {
         {
           headers: {
             'Content-Type': 'application/json'
-          },
-          withCredentials: true
+          }
         }
       );
 
@@ -72,14 +67,13 @@ function Signup() {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
         toast.success('Registration successful!');
-        navigate('/dashboard');
+        navigate(response.data.user.role === 'admin' ? '/admin/dashboard' : '/dashboard');
       }
     } catch (error) {
       console.error('Registration error:', error);
       const errorMessage = error.response?.data?.message || 'Registration failed';
       toast.error(errorMessage);
       
-      // Handle validation errors from server
       if (error.response?.data?.errors) {
         const serverErrors = {};
         error.response.data.errors.forEach(err => {
@@ -117,30 +111,6 @@ function Signup() {
         <div className="w-full md:w-1/2 p-8">
           <h2 className="text-4xl font-bold text-[#4A628A] mb-6">Create Account</h2>
           
-          <div className="flex gap-4 mb-6">
-            <button 
-              disabled={loading}
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors disabled:opacity-50"
-            >
-              <Github className="w-6 h-6 text-[#4A628A]" />
-            </button>
-            <button 
-              disabled={loading}
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors disabled:opacity-50"
-            >
-              <Linkedin className="w-6 h-6 text-[#0A66C2]" />
-            </button>
-          </div>
-
-          <div className="relative my-8">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">or use your email for registration</span>
-            </div>
-          </div>
-
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <input
@@ -197,21 +167,16 @@ function Signup() {
             </div>
 
             <div>
-              <input
-                type="text"
-                name="leetcodeUsername"
-                placeholder="LeetCode Username"
-                value={formData.leetcodeUsername}
+              <select
+                name="role"
+                value={formData.role}
                 onChange={handleChange}
                 disabled={loading}
-                className={`w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2196F3] text-[#4A628A] placeholder-gray-400 disabled:opacity-50 ${
-                  errors.leetcodeUsername ? 'border-2 border-red-500' : ''
-                }`}
-                required
-              />
-              {errors.leetcodeUsername && (
-                <p className="mt-1 text-sm text-red-500">{errors.leetcodeUsername}</p>
-              )}
+                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2196F3] text-[#4A628A]"
+              >
+                <option value="student">Student</option>
+                <option value="admin">Admin</option>
+              </select>
             </div>
 
             <button
