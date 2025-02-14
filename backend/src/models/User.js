@@ -18,15 +18,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  leetcodeUsername: {
-    type: String,
-    required: true,
-    trim: true
-  },
   role: {
     type: String,
-    enum: ['user', 'admin'],
-    default: 'user'
+    enum: ['student', 'admin'],
+    default: 'student'
   }
 }, {
   timestamps: true

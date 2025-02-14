@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   Code2,
   MessageSquare,
@@ -10,24 +10,41 @@ import {
   Settings,
   LogOut,
   BookOpen,
-  Shield
-} from 'lucide-react';
+  Shield,
+  Calendar,
+  Building,
+  FileText,
+} from "lucide-react";
 
 function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  const menuItems = [
-    { icon: Home, label: 'Overview', path: '/dashboard' },
-    { icon: Code2, label: 'LeetCode Profile', path: '/dashboard/leetcode' },
-    { icon: BookOpen, label: 'DSA Sheet', path: '/dashboard/dsa' },
-    { icon: MessageSquare, label: 'Chatbot', path: '/dashboard/chatbot' },
-    { icon: Settings, label: 'Settings', path: '/dashboard/settings' },
-    ...(user?.role === 'admin' ? [
-      { icon: Shield, label: 'Admin', path: '/admin/dashboard' }
-    ] : [])
-  ];
+  const menuItems =
+    user?.role === "admin"
+      ? [
+          { icon: Home, label: "Overview", path: "/admin/dashboard" },
+          { icon: BookOpen, label: "DSA Sheet", path: "/dashboard/dsa" },
+          { icon: Calendar, label: "Sessions", path: "/admin/sessions" },
+          { icon: FileText, label: "Marquee", path: "/admin/marquee" },
+          {
+            icon: Building,
+            label: "Placement Calendar",
+            path: "/admin/placement-calendar",
+          },
+        ]
+      : [
+          { icon: Home, label: "Overview", path: "/dashboard" },
+
+          { icon: BookOpen, label: "DSA Sheet", path: "/dashboard/dsa" },
+          { icon: Calendar, label: "Sessions", path: "/dashboard/sessions" },
+          {
+            icon: Building,
+            label: "Placement Calendar",
+            path: "/dashboard/placement-calendar",
+          },
+        ];
 
   const isActive = (path) => location.pathname === path;
 
@@ -51,9 +68,11 @@ function Sidebar() {
               key={item.label}
               to={item.path}
               className={`flex items-center gap-4 p-3 rounded-lg mb-2 transition-all duration-300
-                ${isActive(item.path)
-                  ? 'bg-[#2196F3] text-white'
-                  : 'text-gray-400 hover:bg-[#2196F3]/10 hover:text-white'}`}
+                ${
+                  isActive(item.path)
+                    ? "bg-[#2196F3] text-white"
+                    : "text-gray-400 hover:bg-[#2196F3]/10 hover:text-white"
+                }`}
             >
               <item.icon size={20} />
               {!isCollapsed && <span>{item.label}</span>}
@@ -64,9 +83,9 @@ function Sidebar() {
         <div className="p-4 border-t border-gray-700">
           <button
             onClick={() => {
-              localStorage.removeItem('token');
-              localStorage.removeItem('user');
-              window.location.href = '/login';
+              localStorage.removeItem("token");
+              localStorage.removeItem("user");
+              window.location.href = "/login";
             }}
             className="flex items-center gap-4 p-3 rounded-lg w-full text-gray-400 hover:bg-red-500/10 hover:text-red-500 transition-all duration-300"
           >

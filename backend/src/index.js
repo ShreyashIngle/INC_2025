@@ -6,6 +6,9 @@ import passport from 'passport';
 import authRoutes from './routes/auth.js';
 import leetcodeRoutes from './routes/leetcode.js';
 import dsaRoutes from './routes/dsa.js';
+import sessionRoutes from './routes/session.js';
+import marqueeRoutes from './routes/marquee.js';
+import companyRoutes from './routes/company.js';
 import morgan from 'morgan';
 import './config/passport.js';
 
@@ -29,6 +32,9 @@ app.use(morgan("tiny"));
 app.use('/api/auth', authRoutes);
 app.use('/api/leetcode', leetcodeRoutes);
 app.use('/api/dsa', dsaRoutes);
+app.use('/api/sessions', sessionRoutes);
+app.use('/api/marquee', marqueeRoutes);
+app.use('/api/companies', companyRoutes);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
