@@ -76,7 +76,10 @@ function SessionManager() {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-white">Sessions</h2>
         <button
-          onClick={() => setIsAddingSession(true)}
+          onClick={() => {
+            console.log('Add Session button clicked');
+            setIsAddingSession(true);
+          }}
           className="flex items-center gap-2 px-4 py-2 bg-[#2196F3] text-white rounded-lg hover:bg-[#1976D2] transition-colors"
         >
           <Plus size={20} />
