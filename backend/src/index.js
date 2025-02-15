@@ -3,20 +3,19 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import passport from 'passport';
+import morgan from 'morgan';
 import authRoutes from './routes/auth.js';
 import leetcodeRoutes from './routes/leetcode.js';
 import dsaRoutes from './routes/dsa.js';
 import sessionRoutes from './routes/session.js';
 import marqueeRoutes from './routes/marquee.js';
 import companyRoutes from './routes/company.js';
-import morgan from 'morgan';
 import './config/passport.js';
 
 dotenv.config();
-
 const app = express();
 
-// CORS configuration
+// CORS Configuration
 app.use(cors({
   origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
   credentials: true,
@@ -28,7 +27,7 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(morgan("tiny"));
 
-// Routes
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/leetcode', leetcodeRoutes);
 app.use('/api/dsa', dsaRoutes);
