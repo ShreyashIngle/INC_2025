@@ -1,15 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper, Map, GanttChart, FileText, Cloud } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper, Map, GanttChart, FileText, Cloud, BookOpen, Calendar, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { translations } from '../../utils/translations';
-// import ProfileIcon from './ProfileIcon';
-// import logo from "../../images/logo.png";
 
 function Sidebar({ isOpen, setIsOpen }) {
   const location = useLocation();
-  const navigate = useNavigate();
   const { language } = useLanguage();
   const t = translations[language].nav;
   const [userRole, setUserRole] = useState(null);
@@ -19,21 +16,25 @@ function Sidebar({ isOpen, setIsOpen }) {
     setUserRole(role);
   }, []);
 
-  const farmerMenuItems = [
-    { icon: Map, label: 'Map View', path: '/dashboard/map' },
-    { icon: Leaf, label: 'Crop Recommendation', path: '/dashboard/crop-recommendation' },
-    { icon: MessageSquare, label: 'Chatbot', path: '/dashboard/chatbot' },
-    { icon: Newspaper, label: 'News', path: '/dashboard/news' },
-    { icon: GanttChart, label: 'Government Schemes', path: '/dashboard/schemes' },
-    { icon: FileText, label: 'Report', path: '/dashboard/report' },
-    { icon: Cloud, label: 'Weather', path: '/dashboard/weather' }
-  ];
+  const menuConfig = {
+    farmer: [
+      { icon: Map, label: 'Map View', path: '/dashboard/map' },
+      { icon: Leaf, label: 'Crop Recommendation', path: '/dashboard/crop-recommendation' },
+      { icon: MessageSquare, label: 'Chatbot', path: '/dashboard/chatbot' },
+      { icon: Newspaper, label: 'News', path: '/dashboard/news' },
+      { icon: GanttChart, label: 'Government Schemes', path: '/dashboard/schemes' },
+      { icon: FileText, label: 'Report', path: '/dashboard/report' },
+      { icon: Cloud, label: 'Weather', path: '/dashboard/weather' }
+    ],
+    enterprise: [
+      { icon: Map, label: 'Map View', path: '/dashboard/map' },
+      { icon: BookOpen, label: 'DSA Sheet', path: '/dashboard/dsa-sheet' },
+      { icon: Calendar, label: 'Placement Calendar', path: '/dashboard/placement-calendar' },
+      { icon: Clock, label: 'Sessions', path: '/dashboard/sessions' } // Added Sessions link
+    ]
+  };
 
-  const enterpriseMenuItems = [
-    { icon: Map, label: 'Map View', path: '/dashboard/map' }
-  ];
-
-  const menuItems = userRole === 'farmer' ? farmerMenuItems : enterpriseMenuItems;
+  const menuItems = menuConfig[userRole] || [];
 
   const isActive = (path) => location.pathname === path;
 
@@ -52,6 +53,7 @@ function Sidebar({ isOpen, setIsOpen }) {
               <button
                 onClick={() => setIsOpen(false)}
                 className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+                aria-label="Close sidebar"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -81,7 +83,6 @@ function Sidebar({ isOpen, setIsOpen }) {
         )}
       </AnimatePresence>
 
-      {/* Overlay for mobile */}
       {isOpen && window.innerWidth < 768 && (
         <motion.div
           initial={{ opacity: 0 }}
