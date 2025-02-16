@@ -17,6 +17,9 @@ import Settings from '../pages/Settings';
 import GovernmentSchemes from '../pages/dashboard/GovernmentSchemes';
 import Report from '../pages/dashboard/Report';
 import WeatherForecast from '../pages/dashboard/WeatherForecast';
+import DsaSheet from '../pages/dashboard/DsaSheet';
+import Sessions from '../pages/dashboard/Sessions';
+import PlacementCalendar from '../pages/dashboard/PlacementCalendar';
 
 const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'] }) => {
   const token = localStorage.getItem('token');
@@ -74,6 +77,18 @@ export const router = createBrowserRouter([
           { 
             path: 'weather', 
             element: <ProtectedRoute allowedRoles={['farmer','enterprise']}><WeatherForecast /></ProtectedRoute> 
+          },
+          {
+            path: 'dsa-sheet',
+            element: <ProtectedRoute allowedRoles={['enterprise']}><DsaSheet /></ProtectedRoute>
+          },
+          {
+            path: 'sessions',
+            element: <ProtectedRoute allowedRoles={['enterprise']}><Sessions /></ProtectedRoute>
+          },
+          {
+            path: 'placement-calendar',
+            element: <ProtectedRoute allowedRoles={['enterprise']}><PlacementCalendar /></ProtectedRoute>
           }
         ]
       },
