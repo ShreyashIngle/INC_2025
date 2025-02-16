@@ -6,6 +6,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
+import dsaRoutes from './routes/dsa.js';
+import sessionRoutes from './routes/sessions.js';
+import companyRoutes from './routes/companies.js';
 import morgan from 'morgan';
 import multer from 'multer';
 
@@ -34,11 +37,11 @@ const upload = multer({
     fileSize: 5 * 1024 * 1024 // 5MB limit
   },
   fileFilter: (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Invalid file type. Only JPEG, PNG and GIF are allowed.'));
+      cb(new Error('Invalid file type. Only JPEG, PNG, GIF and PDF are allowed.'));
     }
   }
 });
@@ -64,6 +67,9 @@ app.use('/api/user', (req, res, next) => {
   req.upload = upload;
   next();
 }, userRoutes);
+app.use('/api/dsa', dsaRoutes);
+app.use('/api/sessions', sessionRoutes);
+app.use('/api/companies', companyRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
