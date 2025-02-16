@@ -1,0 +1,49 @@
+{
+  "schemes": [
+    {
+      "id": 1,
+      "title": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+      "description": "PM-KISAN is a central sector scheme launched on 24th February 2019 to supplement financial needs of land holding farmers, subject to exclusions. Under the scheme, financial benefit of Rs. 6000/- per year is transferred in three equal four-monthly installments into the bank accounts of farmers' families across the country, through Direct Benefit Transfer (DBT) mode.",
+      "benefits": "Rs. 6000/- per year in three equal installments",
+      "achievements": "Rs. 2.81 lakh crores transferred through DBT to more than 11 crores beneficiaries",
+      "icon": "Wallet",
+      "color": "green"
+    },
+    {
+      "id": 2,
+      "title": "Mahatma Gandhi National Rural Employment Guarantee Act (MGNREGA)",
+      "description": "MGNREGA is a flagship scheme launched in 2005 to provide at least 100 days of guaranteed wage employment in a financial year to rural households whose adult members volunteer to do unskilled manual work.",
+      "benefits": "100 days of wage employment per year for rural households",
+      "achievements": "Generated 389 crore person-days of work in FY 2022-23",
+      "icon": "Work",
+      "color": "blue"
+    },
+    {
+      "id": 3,
+      "title": "Pradhan Mantri Jan Dhan Yojana (PMJDY)",
+      "description": "Launched in 2014, PMJDY is a national mission for financial inclusion to ensure access to financial services, including a basic savings bank account, credit, insurance, and pension.",
+      "benefits": "Zero balance accounts, overdraft facility, and RuPay debit card",
+      "achievements": "Over 49 crore accounts opened with a total balance exceeding Rs. 1.97 lakh crores",
+      "icon": "Bank",
+      "color": "purple"
+    },
+    {
+      "id": 4,
+      "title": "Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana (PMJAY)",
+      "description": "PMJAY is the world's largest health assurance scheme launched in 2018 to provide health coverage of up to Rs. 5 lakh per family per year for secondary and tertiary care hospitalization.",
+      "benefits": "Health coverage of up to Rs. 5 lakh per family per year",
+      "achievements": "Over 24 crore Ayushman cards issued, 5 crore hospital treatments worth Rs. 60,000 crore provided",
+      "icon": "Health",
+      "color": "red"
+    },
+    {
+      "id": 5,
+      "title": "Pradhan Mantri Ujjwala Yojana (PMUY)",
+      "description": "Launched in 2016, PMUY aims to safeguard the health of women and children by providing free LPG connections to BPL households.",
+      "benefits": "Free LPG connections with first refill and stove",
+      "achievements": "Over 9 crore LPG connections provided under the scheme",
+      "icon": "Flame",
+      "color": "orange"
+    }
+  ]
+}
