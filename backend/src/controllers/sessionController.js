@@ -4,6 +4,7 @@ import Session from '../models/Session.js';
 export const createSession = async (req, res) => {
   try {
     const { title, description, dateTime, meetLink } = req.body;
+    
     const session = new Session({
       title,
       description,
@@ -11,6 +12,7 @@ export const createSession = async (req, res) => {
       meetLink,
       createdBy: req.userId
     });
+
     await session.save();
     res.status(201).json(session);
   } catch (error) {
@@ -18,19 +20,27 @@ export const createSession = async (req, res) => {
   }
 };
 
-// Get all active sessions
+// Get sessions (both active and past)
 export const getSessions = async (req, res) => {
   try {
-    const sessions = await Session.find({
-      createdBy: req.userId,
-      isActive: true,
-      dateTime: { $gt: new Date() }
-    }).sort({ dateTime: 1 });
+    const { status } = req.query; // 'Upcoming' or 'Past'
+    console.log('Fetching sessions for userId:', req.userId);
+
+    let query = {};
+    if (status === 'Upcoming') {
+      query = { dateTime: { $gt: new Date() } }; // Only future sessions
+    } else if (status === 'Past') {
+      query = { dateTime: { $lte: new Date() } }; // Only past sessions
+    }
+
+    const sessions = await Session.find(query).sort({ dateTime: 1 });
+
     res.json(sessions);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching sessions', error: error.message });
   }
 };
+
 
 // Update session
 export const updateSession = async (req, res) => {

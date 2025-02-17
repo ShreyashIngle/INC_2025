@@ -28,6 +28,11 @@ const sessionSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true
+  },
+  status: {
+    type: String,
+    enum: ['Upcoming', 'Past'],
+    default: 'Upcoming'
   }
 }, {
   timestamps: true
@@ -37,6 +42,9 @@ const sessionSchema = new mongoose.Schema({
 sessionSchema.pre('save', function(next) {
   if (this.dateTime < new Date()) {
     this.isActive = false;
+    this.status = 'Past';
+  } else {
+    this.status = 'Upcoming';
   }
   next();
 });

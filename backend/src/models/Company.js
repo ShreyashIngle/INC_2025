@@ -37,8 +37,28 @@ const companySchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  visitDate: {
+  presentationDate: {
     type: Date,
+    required: true
+  },
+  presentationTime: {
+    type: String,
+    required: true
+  },
+  oaDate: {
+    type: Date,
+    required: true
+  },
+  oaTime: {
+    type: String,
+    required: true
+  },
+  interviewDate: {
+    type: Date,
+    required: true
+  },
+  interviewTime: {
+    type: String,
     required: true
   },
   createdBy: {

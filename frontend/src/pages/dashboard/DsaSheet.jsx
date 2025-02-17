@@ -14,10 +14,18 @@ function DsaSheet() {
     platform: '',
     difficulty: 'Easy'
   });
+  const [userRole, setUserRole] = useState(''); // Add state for user role
 
   useEffect(() => {
     fetchTopics();
+    fetchUserRole(); // Fetch user role
   }, []);
+
+  const fetchUserRole = async () => {
+    // Fetch user role from your API or local storage
+    const role = localStorage.getItem('role'); // Example: fetching from local storage
+    setUserRole(role);
+  };
 
   const fetchTopics = async () => {
     try {
@@ -120,35 +128,36 @@ function DsaSheet() {
       </motion.h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Topics List */}
         <div className="lg:col-span-1">
-          <div className="bg-gray-800 rounded-xl p-6 mb-6">
-            <h2 className="text-xl font-semibold mb-4">Create New Topic</h2>
-            <form onSubmit={handleCreateTopic} className="space-y-4">
-              <input
-                type="text"
-                value={newTopic.name}
-                onChange={(e) => setNewTopic({ ...newTopic, name: e.target.value })}
-                placeholder="Topic Name"
-                className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
-              <textarea
-                value={newTopic.description}
-                onChange={(e) => setNewTopic({ ...newTopic, description: e.target.value })}
-                placeholder="Topic Description"
-                className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                rows="3"
-              />
-              <button
-                type="submit"
-                className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
-              >
-                <Plus className="w-5 h-5" />
-                Create Topic
-              </button>
-            </form>
-          </div>
+          {userRole?.trim() !== 'farmer' && (
+            <div className="bg-gray-800 rounded-xl p-6 mb-6">
+              <h2 className="text-xl font-semibold mb-4">Create New Topic</h2>
+              <form onSubmit={handleCreateTopic} className="space-y-4">
+                <input
+                  type="text"
+                  value={newTopic.name}
+                  onChange={(e) => setNewTopic({ ...newTopic, name: e.target.value })}
+                  placeholder="Topic Name"
+                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  required
+                />
+                <textarea
+                  value={newTopic.description}
+                  onChange={(e) => setNewTopic({ ...newTopic, description: e.target.value })}
+                  placeholder="Topic Description"
+                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  rows="3"
+                />
+                <button
+                  type="submit"
+                  className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                >
+                  <Plus className="w-5 h-5" />
+                  Create Topic
+                </button>
+              </form>
+            </div>
+          )}
 
           <div className="bg-gray-800 rounded-xl p-6">
             <h2 className="text-xl font-semibold mb-4">Topics</h2>
@@ -182,13 +191,11 @@ function DsaSheet() {
           </div>
         </div>
 
-        {/* Questions Section */}
         <div className="lg:col-span-2">
           {selectedTopic ? (
             <div className="bg-gray-800 rounded-xl p-6">
               <h2 className="text-2xl font-semibold mb-6">{selectedTopic.name}</h2>
               
-              {/* Add Question Form */}
               <form onSubmit={handleAddQuestion} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 <input
                   type="text"
@@ -232,7 +239,6 @@ function DsaSheet() {
                 </button>
               </form>
 
-              {/* Questions List */}
               <div className="space-y-4">
                 {selectedTopic.questions.map(question => (
                   <div

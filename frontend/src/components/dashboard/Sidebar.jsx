@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper, Map, GanttChart, FileText, Cloud, BookOpen, Calendar, Clock } from 'lucide-react';
+import { X, BookOpen, Calendar, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { translations } from '../../utils/translations';
@@ -8,7 +8,7 @@ import { translations } from '../../utils/translations';
 function Sidebar({ isOpen, setIsOpen }) {
   const location = useLocation();
   const { language } = useLanguage();
-  const t = translations[language].nav;
+  // const t = translations[language].nav;
   const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {

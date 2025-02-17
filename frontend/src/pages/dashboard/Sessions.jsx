@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Edit2, Trash2, Calendar, Clock, Link as LinkIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, Calendar, Clock, Link as LinkIcon, Download } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { CSVLink } from 'react-csv';
 
 function Sessions() {
   const [sessions, setSessions] = useState([]);
@@ -14,13 +15,16 @@ function Sessions() {
     meetLink: ''
   });
   const [editingSession, setEditingSession] = useState(null);
+  const userRole = localStorage.getItem('userRole');
 
   useEffect(() => {
-    fetchSessions();
-    // Set up interval to check for expired sessions
-    const interval = setInterval(fetchSessions, 60000); // Check every minute
-    return () => clearInterval(interval);
-  }, []);
+    console.log("Running useEffect for role:", userRole);
+    if (userRole === 'enterprise' || userRole === 'farmer') {
+      fetchSessions();
+      const interval = setInterval(fetchSessions, 60000);
+      return () => clearInterval(interval);
+    }
+  }, [userRole]);
 
   const fetchSessions = async () => {
     try {
@@ -28,8 +32,10 @@ function Sessions() {
       const response = await axios.get('http://localhost:5000/api/sessions', {
         headers: { Authorization: `Bearer ${token}` }
       });
+      console.log("API Response:", response.data);
       setSessions(response.data);
     } catch (error) {
+      console.error("Error fetching sessions:", error.response ? error.response.data : error);
       toast.error('Failed to fetch sessions');
     }
   };
@@ -92,6 +98,27 @@ function Sessions() {
     }
   };
 
+  // Updated filtering logic
+  const now = new Date();
+
+  const upcomingSessions = sessions.filter(session => {
+    const sessionDate = new Date(session.dateTime);
+    return sessionDate > now;
+  });
+  
+  const pastSessions = sessions.filter(session => {
+    const sessionDate = new Date(session.dateTime);
+    return sessionDate <= now;
+  });
+
+  const csvData = sessions.map(session => ({
+    Title: session.title,
+    Description: session.description,
+    DateTime: new Date(session.dateTime).toLocaleString(),
+    MeetLink: session.meetLink,
+    Status: new Date(session.dateTime) > now ? 'Upcoming' : 'Past'
+  }));
+
   return (
     <div className="p-8">
       <motion.div
@@ -100,79 +127,137 @@ function Sessions() {
         className="flex justify-between items-center mb-8"
       >
         <h1 className="text-4xl font-bold">Sessions</h1>
-        <button
-          onClick={() => {
-            setEditingSession(null);
-            setFormData({
-              title: '',
-              description: '',
-              dateTime: '',
-              meetLink: ''
-            });
-            setIsModalOpen(true);
-          }}
-          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
-        >
-          <Plus className="w-5 h-5" />
-          Create Session
-        </button>
+        <div className="flex gap-4">
+          {userRole === 'enterprise' && (
+            <button
+              onClick={() => {
+                setEditingSession(null);
+                setFormData({
+                  title: '',
+                  description: '',
+                  dateTime: '',
+                  meetLink: ''
+                });
+                setIsModalOpen(true);
+              }}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+            >
+              <Plus className="w-5 h-5" />
+              Create Session
+            </button>
+          )}
+          <CSVLink
+            data={csvData}
+            filename="sessions.csv"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+          >
+            <Download className="w-5 h-5" />
+            Export CSV
+          </CSVLink>
+        </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sessions.map(session => (
-          <motion.div
-            key={session._id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-gray-800 rounded-xl p-6 hover:shadow-lg transition-all"
-          >
-            <div className="flex justify-between items-start mb-4">
-              <h2 className="text-xl font-semibold">{session.title}</h2>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleEdit(session)}
-                  className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-                >
-                  <Edit2 className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => handleDelete(session._id)}
-                  className="p-2 hover:bg-red-500 rounded-lg transition-colors"
-                >
-                  <Trash2 className="w-5 h-5" />
-                </button>
+      {/* Upcoming Sessions */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-semibold mb-4">Upcoming Sessions</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {upcomingSessions.map(session => (
+            <motion.div
+              key={session._id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-gray-800 rounded-xl p-6 hover:shadow-lg transition-all"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-xl font-semibold">{session.title}</h2>
+                {userRole === 'enterprise' && (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEdit(session)}
+                      className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+                    >
+                      <Edit2 className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(session._id)}
+                      className="p-2 hover:bg-red-500 rounded-lg transition-colors"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
+                )}
               </div>
-            </div>
 
-            <p className="text-gray-300 mb-4">{session.description}</p>
+              <p className="text-gray-300 mb-4">{session.description}</p>
 
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-gray-400">
-                <Calendar className="w-5 h-5" />
-                <span>{new Date(session.dateTime).toLocaleDateString()}</span>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-gray-400">
+                  <Calendar className="w-5 h-5" />
+                  <span>{new Date(session.dateTime).toLocaleDateString()}</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-400">
+                  <Clock className="w-5 h-5" />
+                  <span>{new Date(session.dateTime).toLocaleTimeString()}</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-400">
+                  <LinkIcon className="w-5 h-5" />
+                  <a
+                    href={session.meetLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-green-500 hover:text-green-400 transition-colors"
+                  >
+                    Join Meeting
+                  </a>
+                </div>
               </div>
-              <div className="flex items-center gap-2 text-gray-400">
-                <Clock className="w-5 h-5" />
-                <span>{new Date(session.dateTime).toLocaleTimeString()}</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-400">
-                <LinkIcon className="w-5 h-5" />
-                <a
-                  href={session.meetLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-green-500 hover:text-green-400 transition-colors"
-                >
-                  Join Meeting
-                </a>
-              </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))}
+        </div>
       </div>
 
-      {/* Create/Edit Session Modal */}
-      {isModalOpen && (
+      {/* Past Sessions */}
+      <div>
+        <h2 className="text-2xl font-semibold mb-4">Past Sessions</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {pastSessions.map(session => (
+            <motion.div
+              key={session._id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-gray-800 rounded-xl p-6 hover:shadow-lg transition-all opacity-75"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-xl font-semibold">{session.title}</h2>
+                {userRole === 'enterprise' && (
+                  <button
+                    onClick={() => handleDelete(session._id)}
+                    className="p-2 hover:bg-red-500 rounded-lg transition-colors"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                )}
+              </div>
+
+              <p className="text-gray-300 mb-4">{session.description}</p>
+
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-gray-400">
+                  <Calendar className="w-5 h-5" />
+                  <span>{new Date(session.dateTime).toLocaleDateString()}</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-400">
+                  <Clock className="w-5 h-5" />
+                  <span>{new Date(session.dateTime).toLocaleTimeString()}</span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Modal remains the same */}
+      {isModalOpen && userRole === 'enterprise' && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}

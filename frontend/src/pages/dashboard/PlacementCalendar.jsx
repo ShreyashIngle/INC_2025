@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Edit2, Trash2, Calendar, Building2, Briefcase, GraduationCap } from 'lucide-react';
+import { Plus, Edit2, Trash2, Calendar, Building2, Briefcase, GraduationCap, Download } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 function PlacementCalendar() {
   const [companies, setCompanies] = useState([]);
@@ -10,6 +12,7 @@ function PlacementCalendar() {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [editingCompany, setEditingCompany] = useState(null);
+  const userRole = localStorage.getItem('userRole');
   const [formData, setFormData] = useState({
     name: '',
     month: '',
@@ -21,7 +24,12 @@ function PlacementCalendar() {
       branches: []
     },
     ctc: 0,
-    visitDate: ''
+    presentationDate: '',
+    presentationTime: '',
+    oaDate: '',
+    oaTime: '',
+    interviewDate: '',
+    interviewTime: '',
   });
 
   const months = [
@@ -88,7 +96,12 @@ function PlacementCalendar() {
           branches: []
         },
         ctc: 0,
-        visitDate: ''
+        presentationDate: '',
+        presentationTime: '',
+        oaDate: '',
+        oaTime: '',
+        interviewDate: '',
+        interviewTime: '',
       });
       fetchCompanies();
     } catch (error) {
@@ -100,7 +113,12 @@ function PlacementCalendar() {
     setEditingCompany(company);
     setFormData({
       ...company,
-      visitDate: new Date(company.visitDate).toISOString().slice(0, 16)
+      presentationDate: company.presentationDate || '',
+      presentationTime: company.presentationTime || '',
+      oaDate: company.oaDate || '',
+      oaTime: company.oaTime || '',
+      interviewDate: company.interviewDate || '',
+      interviewTime: company.interviewTime || '',
     });
     setIsModalOpen(true);
   };
@@ -119,6 +137,18 @@ function PlacementCalendar() {
     }
   };
 
+  const exportToPDF = () => {
+    const input = document.getElementById('companies-container');
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF();
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('placement-calendar.pdf');
+    });
+  };
   return (
     <div className="p-8">
       <motion.div
@@ -153,34 +183,49 @@ function PlacementCalendar() {
             })}
           </select>
 
+          {userRole === 'enterprise' && (
+            <button
+              onClick={() => {
+                setEditingCompany(null);
+                setFormData({
+                  name: '',
+                  month: selectedMonth,
+                  year: selectedYear,
+                  jobDescription: '',
+                  eligibilityCriteria: {
+                    cgpa: 0,
+                    backlog: 0,
+                    branches: []
+                  },
+                  ctc: 0,
+                  presentationDate: '',
+                  presentationTime: '',
+                  oaDate: '',
+                  oaTime: '',
+                  interviewDate: '',
+                  interviewTime: '',
+                });
+                setIsModalOpen(true);
+              }}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+            >
+              <Plus className="w-5 h-5" />
+              Add Company
+            </button>
+          )}
+
           <button
-            onClick={() => {
-              setEditingCompany(null);
-              setFormData({
-                name: '',
-                month: selectedMonth,
-                year: selectedYear,
-                jobDescription: '',
-                eligibilityCriteria: {
-                  cgpa: 0,
-                  backlog: 0,
-                  branches: []
-                },
-                ctc: 0,
-                visitDate: ''
-              });
-              setIsModalOpen(true);
-            }}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+            onClick={exportToPDF}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
           >
-            <Plus className="w-5 h-5" />
-            Add Company
+            <Download className="w-5 h-5" />
+            Export PDF
           </button>
         </div>
       </motion.div>
 
       {selectedMonth && selectedYear ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="companies-container" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {companies.map(company => (
             <motion.div
               key={company._id}
@@ -190,26 +235,33 @@ function PlacementCalendar() {
             >
               <div className="flex justify-between items-start mb-4">
                 <h2 className="text-xl font-semibold">{company.name}</h2>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleEdit(company)}
-                    className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-                  >
-                    <Edit2 className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(company._id)}
-                    className="p-2 hover:bg-red-500 rounded-lg transition-colors"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
-                </div>
+                {userRole === 'enterprise' && (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEdit(company)}
+                      className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+                    >
+                      <Edit2 className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(company._id)}
+                      className="p-2 hover:bg-red-500 rounded-lg transition-colors"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-4">
                 <div className="flex items-center gap-2 text-gray-400">
                   <Calendar className="w-5 h-5" />
-                  <span>Visit Date: {new Date(company.visitDate).toLocaleDateString()}</span>
+                  <div>
+                    <p>Presentation: {new Date(company.presentationDate).toLocaleDateString()} {company.presentationTime}</p>
+                    <p>Presentation: {company.presentationDate} {company.presentationTime}</p>
+                    <p>OA: {company.oaDate} {company.oaTime}</p>
+                    <p>Interview: {company.interviewDate} {company.interviewTime}</p>
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-2 text-gray-400">
@@ -249,7 +301,7 @@ function PlacementCalendar() {
       )}
 
       {/* Create/Edit Company Modal */}
-      {isModalOpen && (
+      {isModalOpen && userRole === 'enterprise' && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -372,17 +424,85 @@ function PlacementCalendar() {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">
-                  Visit Date
-                </label>
-                <input
-                  type="datetime-local"
-                  value={formData.visitDate}
-                  onChange={(e) => setFormData({ ...formData, visitDate: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                  required
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-1">
+                    Presentation Date
+                  </label>
+                  <input
+                    type="date"
+                    value={formData.presentationDate}
+                    onChange={(e) => setFormData({ ...formData, presentationDate: e.target.value })}
+                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-1">
+                    Presentation Time
+                  </label>
+                  <input
+                    type="time"
+                    value={formData.presentationTime}
+                    onChange={(e) => setFormData({ ...formData, presentationTime: e.target.value })}
+                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-1">
+                    OA Date
+                  </label>
+                  <input
+                    type="date"
+                    value={formData.oaDate}
+                    onChange={(e) => setFormData({ ...formData, oaDate: e.target.value })}
+                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-1">
+                    OA Time
+                  </label>
+                  <input
+                    type="time"
+                    value={formData.oaTime}
+                    onChange={(e) => setFormData({ ...formData, oaTime: e.target.value })}
+                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-1">
+                    Interview Date
+                  </label>
+                  <input
+                    type="date"
+                    value={formData.interviewDate}
+                    onChange={(e) => setFormData({ ...formData, interviewDate: e.target.value })}
+                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-1">
+                    Interview Time
+                  </label>
+                  <input
+                    type="time"
+                    value={formData.interviewTime}
+                    onChange={(e) => setFormData({ ...formData, interviewTime: e.target.value })}
+                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    required
+                  />
+                </div>
               </div>
 
               <div className="flex justify-end gap-4 mt-6">
