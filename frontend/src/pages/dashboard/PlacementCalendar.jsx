@@ -32,10 +32,9 @@ function PlacementCalendar() {
   const branches = [
     'Computer Science',
     'Information Technology',
-    'Electronics',
-    'Mechanical',
-    'Civil',
-    'Electrical'
+    'ENTC',
+    'AIDS',
+    'ECE',
   ];
 
   useEffect(() => {

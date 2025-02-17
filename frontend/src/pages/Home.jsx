@@ -8,11 +8,9 @@ import CallToAction from '../components/home/CallToAction';
 import InfiniteScroller from '../components/shared/InfiniteScroller';
 
 const scrollItems = [
-  'YIELD PREDICTIONS',
-  'CROP HEALTH MONITORING',
-  'SUSTAINABILITY INSIGHTS',
-  'PRECISION FARMING',
-  'SATELLITE DATA ANALYTICS',
+  'PLACEMENT CALENDAR',
+  'DSA SHEET',
+  'SESSIONS',
 ];
 
 function Home() {
