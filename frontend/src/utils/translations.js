@@ -19,10 +19,10 @@ export const translations = {
       logout: 'Logout',
     },
     hero: {
-      title: 'PREDICT. GROW. HARVEST.',
-      subtitle: 'WELCOME TO YIELD VISION!',
+      title: 'LEARN. PRACTISE. REPEAT.',
+      subtitle: 'WELCOME TO PREP GENIUS!',
       description:
-        'At YieldVision, we combine cutting-edge satellite imagery with advanced machine learning to provide accurate yield predictions for farmers worldwide. Our platform uses real-time satellite data to forecast crop yields, optimize farming practices, and increase productivity.',
+        'At PREP GENIUS, we combine interactive learning modules with real-world practice to empower learners worldwide. Our platform offers hands-on exercises, AI-driven assessments, and personalized learning paths to help users master new skills, improve proficiency, and achieve their educational goals.',
     },
     testimonials: {
       quote:
