@@ -5,18 +5,11 @@ import About from '../pages/About';
 import Services from '../pages/Services';
 import Contact from '../pages/Contact';
 import Dashboard from '../pages/Dashboard';
-import MapView from '../pages/dashboard/MapView';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
-import ForgotPassword from '../pages/ForgotPassword';
-import CropRecommendation from '../components/crop/CropRecommendation';
-import Chatbot from '../pages/Chatbot';
-import News from '../pages/News';
-import Profile from '../pages/Profile';
 import Settings from '../pages/Settings';
-import GovernmentSchemes from '../pages/dashboard/GovernmentSchemes';
-import Report from '../pages/dashboard/Report';
-import WeatherForecast from '../pages/dashboard/WeatherForecast';
+import Profile from '../pages/Profile';
+import ForgotPassword from '../pages/ForgotPassword';
 import DsaSheet from '../pages/dashboard/DsaSheet';
 import Sessions from '../pages/dashboard/Sessions';
 import PlacementCalendar from '../pages/dashboard/PlacementCalendar';
@@ -30,7 +23,7 @@ const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'] }) =
   }
 
   if (!allowedRoles.includes(userRole)) {
-    return <Navigate to="/dashboard/map" replace />;
+    return <Navigate to="/dashboard/dsa-sheet" replace />;
   }
 
   return children;
@@ -49,35 +42,7 @@ export const router = createBrowserRouter([
         path: 'dashboard',
         element: <ProtectedRoute><Dashboard /></ProtectedRoute>,
         children: [
-          { index: true, element: <Navigate to="map" replace /> },
-          { 
-            path: 'map', 
-            element: <ProtectedRoute allowedRoles={['farmer', 'enterprise']}><MapView /></ProtectedRoute> 
-          },
-          { 
-            path: 'crop-recommendation', 
-            element: <ProtectedRoute allowedRoles={['farmer']}><CropRecommendation /></ProtectedRoute> 
-          },
-          { 
-            path: 'chatbot', 
-            element: <ProtectedRoute allowedRoles={['farmer']}><Chatbot /></ProtectedRoute> 
-          },
-          { 
-            path: 'news', 
-            element: <ProtectedRoute allowedRoles={['farmer']}><News /></ProtectedRoute> 
-          },
-          { 
-            path: 'schemes', 
-            element: <ProtectedRoute allowedRoles={['farmer']}><GovernmentSchemes /></ProtectedRoute> 
-          },
-          { 
-            path: 'report', 
-            element: <ProtectedRoute allowedRoles={['farmer']}><Report /></ProtectedRoute> 
-          },
-          { 
-            path: 'weather', 
-            element: <ProtectedRoute allowedRoles={['farmer','enterprise']}><WeatherForecast /></ProtectedRoute> 
-          },
+          { index: true, element: <Navigate to="dsa-sheet" replace /> },
           {
             path: 'dsa-sheet',
             element: <ProtectedRoute allowedRoles={['enterprise']}><DsaSheet /></ProtectedRoute>
