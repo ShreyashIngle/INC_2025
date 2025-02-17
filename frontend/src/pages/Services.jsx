@@ -56,7 +56,7 @@ function Services() {
                 />
                 <div className="absolute inset-0 bg-black/60 group-hover:bg-black/70 transition-colors duration-300" />
                 <div className="absolute inset-0 p-6 flex flex-col justify-center items-center text-center">
-                  <service.icon className="w-12 h-12 text-green-500 mb-4" />
+                  <service.icon className="w-12 h-12 text-blue-500 mb-4" />
                   <h3 className="text-2xl font-bold mb-2">{service.title}</h3>
                   <p className="text-gray-300">{service.description}</p>
                 </div>

@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Bell, Globe } from 'lucide-react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
-import axios from 'axios';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../utils/translations';
 
@@ -50,7 +50,7 @@ function Settings() {
           {/* Notifications Section */}
           <div className="bg-gray-800 rounded-2xl p-8">
             <div className="flex items-center gap-3 mb-6">
-              <Bell className="w-6 h-6 text-brand-green" />
+              <Bell className="w-6 h-6 text-brand-blue" />
               <h2 className="text-2xl font-bold">{t.notifications}</h2>
             </div>
 
@@ -61,7 +61,7 @@ function Settings() {
                   <button
                     onClick={() => handleNotificationChange(key)}
                     className={`relative w-12 h-6 rounded-full transition-colors ${
-                      value ? 'bg-brand-green' : 'bg-gray-600'
+                      value ? 'bg-brand-blue' : 'bg-gray-600'
                     }`}
                   >
                     <span
@@ -78,7 +78,7 @@ function Settings() {
           {/* Language Section */}
           <div className="bg-gray-800 rounded-2xl p-8">
             <div className="flex items-center gap-3 mb-6">
-              <Globe className="w-6 h-6 text-brand-green" />
+              <Globe className="w-6 h-6 text-brand-blue" />
               <h2 className="text-2xl font-bold">{t.language}</h2>
             </div>
 
@@ -86,7 +86,7 @@ function Settings() {
               <span className="text-gray-300">{t.currentLanguage}: {language.toUpperCase()}</span>
               <button
                 onClick={toggleLanguage}
-                className="px-6 py-2 bg-brand-green text-black rounded-lg hover:bg-opacity-90 transition-colors"
+                className="px-6 py-2 bg-brand-blue text-black rounded-lg hover:bg-opacity-90 transition-colors"
               >
                 {t.switchLanguage}
               </button>

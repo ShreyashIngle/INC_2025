@@ -25,7 +25,7 @@ function About() {
             transition={{ delay: 0.2 }}
             className="bg-gray-800 p-8 rounded-2xl"
           >
-            <Target className="w-12 h-12 text-green-500 mb-4" />
+            <Target className="w-12 h-12 text-blue-500 mb-4" />
             <h2 className="text-2xl font-bold mb-4">{t.mission}</h2>
             <p className="text-gray-300">{t.missionText}</p>
           </motion.div>
@@ -36,7 +36,7 @@ function About() {
             transition={{ delay: 0.4 }}
             className="bg-gray-800 p-8 rounded-2xl"
           >
-            <Eye className="w-12 h-12 text-green-500 mb-4" />
+            <Eye className="w-12 h-12 text-blue-500 mb-4" />
             <h2 className="text-2xl font-bold mb-4">{t.vision}</h2>
             <p className="text-gray-300">{t.visionText}</p>
           </motion.div>
@@ -47,7 +47,7 @@ function About() {
             transition={{ delay: 0.6 }}
             className="bg-gray-800 p-8 rounded-2xl"
           >
-            <Users className="w-12 h-12 text-green-500 mb-4" />
+            <Users className="w-12 h-12 text-blue-500 mb-4" />
             <h2 className="text-2xl font-bold mb-4">{t.team}</h2>
             <p className="text-gray-300">{t.teamText}</p>
           </motion.div>

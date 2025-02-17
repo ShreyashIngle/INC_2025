@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 function SessionMarquee() {
   const [upcomingSessions, setUpcomingSessions] = useState([]);
@@ -34,7 +34,7 @@ function SessionMarquee() {
         <div className="animate-scroll-x whitespace-nowrap">
           {upcomingSessions.map((session, index) => (
             <span key={session._id} className="inline-block mx-8">
-              <span className="text-green-500">Upcoming Session:</span>{' '}
+              <span className="text-blue-500">Upcoming Session:</span>{' '}
               {session.title} - {new Date(session.dateTime).toLocaleString()}
               {index < upcomingSessions.length - 1 && ' | '}
             </span>

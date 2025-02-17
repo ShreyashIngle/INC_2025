@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
-import { Github, Linkedin, Eye, EyeOff } from 'lucide-react';
-import toast from 'react-hot-toast';
 import axios from 'axios';
+import { motion } from 'framer-motion';
+import { Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
+import ProfileUpdatePopup from '../components/shared/ProfileUpdatePopup';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../utils/translations';
-import ProfileUpdatePopup from '../components/shared/ProfileUpdatePopup';
 
 function Login() {
   const navigate = useNavigate();
@@ -84,7 +84,7 @@ function Login() {
                 placeholder={t.emailPlaceholder}
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-green text-black placeholder-gray-800"
+                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue text-black placeholder-gray-800"
                 required
               />
             </div>
@@ -96,7 +96,7 @@ function Login() {
                 placeholder={t.passwordPlaceholder}
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-green text-gray-900 placeholder-gray-800"
+                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue text-gray-900 placeholder-gray-800"
                 required
               />
               <button
@@ -118,7 +118,7 @@ function Login() {
                     value="farmer"
                     checked={formData.role === 'farmer'}
                     onChange={handleChange}
-                    className="form-radio text-brand-green"
+                    className="form-radio text-brand-blue"
                   />
                   <span>Farmer</span>
                 </label>
@@ -129,7 +129,7 @@ function Login() {
                     value="enterprise"
                     checked={formData.role === 'enterprise'}
                     onChange={handleChange}
-                    className="form-radio text-brand-green"
+                    className="form-radio text-brand-blue"
                   />
                   <span>Enterprise</span>
                 </label>
@@ -139,7 +139,7 @@ function Login() {
             <div className="flex items-center justify-end">
               <Link
                 to="/forgot-password"
-                className="text-sm text-gray-600 hover:text-brand-green"
+                className="text-sm text-gray-600 hover:text-brand-blue"
               >
                 {t.forgotPassword}
               </Link>
@@ -154,7 +154,7 @@ function Login() {
           </form>
         </div>
 
-        <div className="hidden md:block w-1/2 bg-green-900 p-12 text-white">
+        <div className="hidden md:block w-1/2 bg-blue-900 p-12 text-white">
           <div className="h-full flex flex-col justify-center items-center text-center">
             <h2 className="text-4xl font-bold mb-6">{t.helloFriend}</h2>
             <p className="text-lg mb-12">{t.welcomeMessage}</p>

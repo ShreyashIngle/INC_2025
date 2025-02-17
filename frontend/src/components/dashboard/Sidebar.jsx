@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { BookOpen, Calendar, Clock, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { X, BookOpen, Calendar, Clock } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { translations } from '../../utils/translations';
 
 function Sidebar({ isOpen, setIsOpen }) {
   const location = useLocation();
@@ -64,7 +63,7 @@ function Sidebar({ isOpen, setIsOpen }) {
                     onClick={() => window.innerWidth < 768 && setIsOpen(false)}
                     className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
                       isCurrentActive
-                        ? 'bg-green-800 text-white'
+                        ? 'bg-blue-800 text-white'
                         : 'text-gray-300 hover:bg-gray-800 hover:text-white'
                     }`}
                   >

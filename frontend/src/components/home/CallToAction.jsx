@@ -1,14 +1,13 @@
 
 
 
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { useRef } from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
 import image5 from "../../images/image5.jpg";
 import image6 from "../../images/image6.jpg";
 import image7 from "../../images/image7.jpg";
-import { useLanguage } from '../../contexts/LanguageContext';
 import { translations } from '../../utils/translations';
 
 function CallToAction() {
@@ -55,7 +54,7 @@ function CallToAction() {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="inline-flex items-center px-6 py-3 bg-green-500 text-black rounded-full font-semibold hover:bg-green-400 transition-colors"
+                      className="inline-flex items-center px-6 py-3 bg-blue-500 text-black rounded-full font-semibold hover:bg-blue-400 transition-colors"
                     >
                       {t.learnMore}
                       <ArrowRight className="ml-2" size={20} />

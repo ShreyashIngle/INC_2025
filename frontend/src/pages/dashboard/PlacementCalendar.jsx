@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Plus, Edit2, Trash2, Calendar, Building2, Briefcase, GraduationCap, Download } from 'lucide-react';
 import axios from 'axios';
-import toast from 'react-hot-toast';
+import { motion } from 'framer-motion';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { Briefcase, Calendar, Download, Edit2, GraduationCap, Plus, Trash2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 function PlacementCalendar() {
   const [companies, setCompanies] = useState([]);
@@ -162,7 +162,7 @@ function PlacementCalendar() {
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
-            className="px-4 py-2 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="px-4 py-2 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Select Month</option>
             {months.map(month => (
@@ -173,7 +173,7 @@ function PlacementCalendar() {
           <select
             value={selectedYear}
             onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-            className="px-4 py-2 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="px-4 py-2 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             {[...Array(5)].map((_, i) => {
               const year = new Date().getFullYear() + i;
@@ -207,7 +207,7 @@ function PlacementCalendar() {
                 });
                 setIsModalOpen(true);
               }}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
             >
               <Plus className="w-5 h-5" />
               Add Company
@@ -321,7 +321,7 @@ function PlacementCalendar() {
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -333,7 +333,7 @@ function PlacementCalendar() {
                 <textarea
                   value={formData.jobDescription}
                   onChange={(e) => setFormData({ ...formData, jobDescription: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   rows="3"
                   required
                 />
@@ -355,7 +355,7 @@ function PlacementCalendar() {
                         cgpa: parseFloat(e.target.value)
                       }
                     })}
-                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -374,7 +374,7 @@ function PlacementCalendar() {
                         backlog: parseInt(e.target.value)
                       }
                     })}
-                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -402,7 +402,7 @@ function PlacementCalendar() {
                             }
                           });
                         }}
-                        className="rounded bg-gray-700 border-gray-600 text-green-500 focus:ring-green-500"
+                        className="rounded bg-gray-700 border-gray-600 text-blue-500 focus:ring-blue-500"
                       />
                       <span className="text-sm text-gray-300">{branch}</span>
                     </label>
@@ -419,7 +419,7 @@ function PlacementCalendar() {
                   step="0.1"
                   value={formData.ctc}
                   onChange={(e) => setFormData({ ...formData, ctc: parseFloat(e.target.value) })}
-                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -433,7 +433,7 @@ function PlacementCalendar() {
                     type="date"
                     value={formData.presentationDate}
                     onChange={(e) => setFormData({ ...formData, presentationDate: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -445,7 +445,7 @@ function PlacementCalendar() {
                     type="time"
                     value={formData.presentationTime}
                     onChange={(e) => setFormData({ ...formData, presentationTime: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -460,7 +460,7 @@ function PlacementCalendar() {
                     type="date"
                     value={formData.oaDate}
                     onChange={(e) => setFormData({ ...formData, oaDate: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -472,7 +472,7 @@ function PlacementCalendar() {
                     type="time"
                     value={formData.oaTime}
                     onChange={(e) => setFormData({ ...formData, oaTime: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -487,7 +487,7 @@ function PlacementCalendar() {
                     type="date"
                     value={formData.interviewDate}
                     onChange={(e) => setFormData({ ...formData, interviewDate: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -499,7 +499,7 @@ function PlacementCalendar() {
                     type="time"
                     value={formData.interviewTime}
                     onChange={(e) => setFormData({ ...formData, interviewTime: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -515,7 +515,7 @@ function PlacementCalendar() {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   {editingCompany ? 'Update' : 'Add'}
                 </button>

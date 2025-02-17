@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
-import toast from "react-hot-toast";
 import axios from "axios";
+import { motion } from "framer-motion";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
 import { translations } from "../utils/translations";
 
@@ -47,7 +47,7 @@ function Signup() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white rounded-[2rem] shadow-xl overflow-hidden max-w-3xl w-full flex"
       >
-        <div className="hidden md:block w-1/2 bg-green-900 p-8 text-white rounded-l-[2rem]">
+        <div className="hidden md:block w-1/2 bg-blue-900 p-8 text-white rounded-l-[2rem]">
           <div className="h-full flex flex-col justify-center items-center text-center">
             <h2 className="text-4xl font-bold mb-6">{t.alreadySigned}</h2>
             <p className="text-lg mb-12">{t.enterDetails}</p>
@@ -82,7 +82,7 @@ function Signup() {
                 placeholder={t.namePlaceholder}
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-green text-gray-900 placeholder-gray-800"
+                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue text-gray-900 placeholder-gray-800"
                 required
               />
             </div>
@@ -94,7 +94,7 @@ function Signup() {
                 placeholder={t.emailPlaceholder}
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-green text-gray-900 placeholder-gray-800"
+                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue text-gray-900 placeholder-gray-800"
                 required
               />
             </div>
@@ -106,7 +106,7 @@ function Signup() {
                 placeholder={t.passwordPlaceholder}
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-green text-gray-900 placeholder-gray-800"
+                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue text-gray-900 placeholder-gray-800"
                 required
               />
               <button
@@ -127,7 +127,7 @@ function Signup() {
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-green text-gray-900 placeholder-gray-800"
+                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue text-gray-900 placeholder-gray-800"
                 required
               >
                 <option value="" disabled>

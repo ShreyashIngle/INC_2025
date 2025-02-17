@@ -1,9 +1,9 @@
 
 
 import { motion } from 'framer-motion';
-import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from 'lucide-react';
-import logo from "../../images/logo.png";
+import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import logo from "../../images/logo.png";
 import { translations } from '../../utils/translations';
 
 function Footer() {
@@ -11,7 +11,7 @@ function Footer() {
   const t = translations[language].footer;
 
   return (
-    <footer className="bg-gradient-to-b from-green-900 to-black py-16">
+    <footer className="bg-gradient-to-b from-blue-900 to-black py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>

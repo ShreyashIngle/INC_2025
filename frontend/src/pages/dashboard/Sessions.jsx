@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Plus, Edit2, Trash2, Calendar, Clock, Link as LinkIcon, Download } from 'lucide-react';
 import axios from 'axios';
-import toast from 'react-hot-toast';
+import { motion } from 'framer-motion';
+import { Calendar, Clock, Download, Edit2, Link as LinkIcon, Plus, Trash2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { CSVLink } from 'react-csv';
+import toast from 'react-hot-toast';
 
 function Sessions() {
   const [sessions, setSessions] = useState([]);
@@ -140,7 +140,7 @@ function Sessions() {
                 });
                 setIsModalOpen(true);
               }}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
             >
               <Plus className="w-5 h-5" />
               Create Session
@@ -205,7 +205,7 @@ function Sessions() {
                     href={session.meetLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-green-500 hover:text-green-400 transition-colors"
+                    className="text-blue-500 hover:text-blue-400 transition-colors"
                   >
                     Join Meeting
                   </a>
@@ -277,7 +277,7 @@ function Sessions() {
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -289,7 +289,7 @@ function Sessions() {
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   rows="3"
                   required
                 />
@@ -303,7 +303,7 @@ function Sessions() {
                   type="datetime-local"
                   value={formData.dateTime}
                   onChange={(e) => setFormData({ ...formData, dateTime: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -316,7 +316,7 @@ function Sessions() {
                   type="url"
                   value={formData.meetLink}
                   onChange={(e) => setFormData({ ...formData, meetLink: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -331,7 +331,7 @@ function Sessions() {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   {editingSession ? 'Update' : 'Create'}
                 </button>

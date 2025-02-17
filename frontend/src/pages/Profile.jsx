@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Camera, MapPin, Phone, Mail, Ruler, Leaf } from 'lucide-react';
-import toast from 'react-hot-toast';
 import axios from 'axios';
+import { motion } from 'framer-motion';
+import { Camera, Leaf, Mail, MapPin, Phone, Ruler } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../utils/translations';
 
@@ -141,7 +141,7 @@ function Profile() {
                     </div>
                   )}
                 </div>
-                <label className="absolute bottom-0 right-0 bg-brand-green text-black p-2 rounded-full cursor-pointer hover:bg-opacity-90 transition-colors">
+                <label className="absolute bottom-0 right-0 bg-brand-blue text-black p-2 rounded-full cursor-pointer hover:bg-opacity-90 transition-colors">
                   <Camera className="w-5 h-5" />
                   <input
                     type="file"
@@ -169,7 +169,7 @@ function Profile() {
                         value={profile.location}
                         onChange={(e) => setProfile(prev => ({ ...prev, location: e.target.value }))}
                         disabled={!isEditing}
-                        className="w-full pl-10 pr-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green disabled:opacity-50"
+                        className="w-full pl-10 pr-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue disabled:opacity-50"
                         placeholder={t.locationPlaceholder}
                       />
                     </div>
@@ -186,7 +186,7 @@ function Profile() {
                         value={profile.phone}
                         onChange={(e) => setProfile(prev => ({ ...prev, phone: e.target.value }))}
                         disabled={!isEditing}
-                        className="w-full pl-10 pr-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green disabled:opacity-50"
+                        className="w-full pl-10 pr-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue disabled:opacity-50"
                         placeholder={t.phonePlaceholder}
                       />
                     </div>
@@ -218,7 +218,7 @@ function Profile() {
                         value={profile.landArea}
                         onChange={(e) => setProfile(prev => ({ ...prev, landArea: e.target.value }))}
                         disabled={!isEditing}
-                        className="w-full pl-10 pr-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green disabled:opacity-50"
+                        className="w-full pl-10 pr-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue disabled:opacity-50"
                         placeholder={t.landAreaPlaceholder}
                       />
                     </div>
@@ -234,7 +234,7 @@ function Profile() {
                         value={profile.soilType}
                         onChange={(e) => setProfile(prev => ({ ...prev, soilType: e.target.value }))}
                         disabled={!isEditing}
-                        className="w-full pl-10 pr-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green disabled:opacity-50"
+                        className="w-full pl-10 pr-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue disabled:opacity-50"
                       >
                         <option value="">{t.soilTypePlaceholder}</option>
                         {soilTypes.map(type => (
@@ -257,7 +257,7 @@ function Profile() {
                       </button>
                       <button
                         type="submit"
-                        className="px-6 py-2 rounded-lg bg-brand-green text-black hover:bg-opacity-90 transition-colors"
+                        className="px-6 py-2 rounded-lg bg-brand-blue text-black hover:bg-opacity-90 transition-colors"
                       >
                         {t.save}
                       </button>
@@ -266,7 +266,7 @@ function Profile() {
                     <button
                       type="button"
                       onClick={() => setIsEditing(true)}
-                      className="px-6 py-2 rounded-lg bg-brand-green text-black hover:bg-opacity-90 transition-colors"
+                      className="px-6 py-2 rounded-lg bg-brand-blue text-black hover:bg-opacity-90 transition-colors"
                     >
                       {t.edit}
                     </button>
