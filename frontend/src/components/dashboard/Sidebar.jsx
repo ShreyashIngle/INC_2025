@@ -18,19 +18,14 @@ function Sidebar({ isOpen, setIsOpen }) {
 
   const menuConfig = {
     farmer: [
-      { icon: Map, label: 'Map View', path: '/dashboard/map' },
-      { icon: Leaf, label: 'Crop Recommendation', path: '/dashboard/crop-recommendation' },
-      { icon: MessageSquare, label: 'Chatbot', path: '/dashboard/chatbot' },
-      { icon: Newspaper, label: 'News', path: '/dashboard/news' },
-      { icon: GanttChart, label: 'Government Schemes', path: '/dashboard/schemes' },
-      { icon: FileText, label: 'Report', path: '/dashboard/report' },
-      { icon: Cloud, label: 'Weather', path: '/dashboard/weather' }
-    ],
-    enterprise: [
-      { icon: Map, label: 'Map View', path: '/dashboard/map' },
       { icon: BookOpen, label: 'DSA Sheet', path: '/dashboard/dsa-sheet' },
       { icon: Calendar, label: 'Placement Calendar', path: '/dashboard/placement-calendar' },
-      { icon: Clock, label: 'Sessions', path: '/dashboard/sessions' } // Added Sessions link
+      { icon: Clock, label: 'Sessions', path: '/dashboard/sessions' } 
+    ],
+    enterprise: [
+      { icon: BookOpen, label: 'DSA Sheet', path: '/dashboard/dsa-sheet' },
+      { icon: Calendar, label: 'Placement Calendar', path: '/dashboard/placement-calendar' },
+      { icon: Clock, label: 'Sessions', path: '/dashboard/sessions' } 
     ]
   };
 
