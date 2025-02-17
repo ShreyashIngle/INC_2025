@@ -18,16 +18,23 @@ export const createCompany = async (req, res) => {
 export const getCompaniesByMonth = async (req, res) => {
   try {
     const { month, year } = req.query;
+
+    // Query the database to find companies that match the provided month and year
     const companies = await Company.find({
-      createdBy: req.userId,
-      month,
-      year: parseInt(year)
-    }).sort({ visitDate: 1 });
+      month: month,
+      year: parseInt(year), // Ensure the year is parsed as a number
+    }).sort({ presentationDate: 1 }); // Sort by presentationDate or any field you prefer
+
+    if (companies.length === 0) {
+      return res.status(404).json({ message: 'No companies found for the given month and year' });
+    }
+
     res.json(companies);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching companies', error: error.message });
   }
 };
+
 
 // Update company
 export const updateCompany = async (req, res) => {

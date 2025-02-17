@@ -1,3 +1,4 @@
+import React from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import RootLayout from '../layouts/RootLayout';
 import Home from '../pages/Home';
@@ -14,7 +15,7 @@ import DsaSheet from '../pages/dashboard/DsaSheet';
 import Sessions from '../pages/dashboard/Sessions';
 import PlacementCalendar from '../pages/dashboard/PlacementCalendar';
 
-const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'] }) => {
+const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'], readOnly = false }) => {
   const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('userRole');
 
@@ -26,7 +27,7 @@ const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'] }) =
     return <Navigate to="/dashboard/dsa-sheet" replace />;
   }
 
-  return children;
+  return React.cloneElement(children, { readOnly: readOnly && userRole === 'farmer' });
 };
 
 export const router = createBrowserRouter([
@@ -45,15 +46,15 @@ export const router = createBrowserRouter([
           { index: true, element: <Navigate to="dsa-sheet" replace /> },
           {
             path: 'dsa-sheet',
-            element: <ProtectedRoute allowedRoles={['enterprise']}><DsaSheet /></ProtectedRoute>
+            element: <ProtectedRoute allowedRoles={['farmer', 'enterprise']} readOnly={true}><DsaSheet /></ProtectedRoute>
           },
           {
             path: 'sessions',
-            element: <ProtectedRoute allowedRoles={['enterprise']}><Sessions /></ProtectedRoute>
+            element: <ProtectedRoute allowedRoles={['farmer', 'enterprise']} readOnly={true}><Sessions /></ProtectedRoute>
           },
           {
             path: 'placement-calendar',
-            element: <ProtectedRoute allowedRoles={['enterprise']}><PlacementCalendar /></ProtectedRoute>
+            element: <ProtectedRoute allowedRoles={['farmer', 'enterprise']} readOnly={true}><PlacementCalendar /></ProtectedRoute>
           }
         ]
       },
