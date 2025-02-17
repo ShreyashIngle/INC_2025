@@ -1,8 +1,7 @@
 
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { Quote } from 'lucide-react';
+import { useRef } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { translations } from '../../utils/translations';
 
@@ -23,7 +22,7 @@ function Testimonials() {
         >
           <Quote
             size={48}
-            className="absolute -top-12 -left-12 text-green-500 opacity-50"
+            className="absolute -top-12 -left-12 text-blue-500 opacity-50"
           />
 
           <motion.p
@@ -37,7 +36,7 @@ function Testimonials() {
 
           <Quote
             size={48}
-            className="absolute -bottom-12 -right-12 text-green-500 opacity-50"
+            className="absolute -bottom-12 -right-12 text-blue-500 opacity-50"
           />
         </motion.div>
       </div>

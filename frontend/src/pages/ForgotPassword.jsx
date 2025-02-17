@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
-import toast from "react-hot-toast";
 import axios from "axios";
+import { motion } from "framer-motion";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -61,7 +61,7 @@ function ForgotPassword() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900"
+                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 required
               />
             </div>
@@ -83,7 +83,7 @@ function ForgotPassword() {
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
                 placeholder="Enter OTP"
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900"
+                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 required
               />
             </div>
@@ -105,7 +105,7 @@ function ForgotPassword() {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="New Password"
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900"
+                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 required
               />
               <button
@@ -126,7 +126,7 @@ function ForgotPassword() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm Password"
-                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900"
+                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 required
               />
               <button
@@ -153,7 +153,7 @@ function ForgotPassword() {
       case "success":
         return (
           <div className="text-center">
-            <div className="text-green-500 mb-4">
+            <div className="text-blue-500 mb-4">
               <svg
                 className="w-16 h-16 mx-auto"
                 fill="none"
@@ -185,7 +185,7 @@ function ForgotPassword() {
         <h2 className="text-4xl font-bold text-gray-900 mb-6">Reset Password</h2>
         {renderStep()}
         <div className="mt-6 text-center">
-          <Link to="/login" className="text-green-600 hover:text-green-500 text-sm">
+          <Link to="/login" className="text-blue-600 hover:text-blue-500 text-sm">
             Back to Login
           </Link>
         </div>

@@ -43,7 +43,7 @@ function Contact() {
             className="space-y-8"
           >
             <div className="flex items-center space-x-4">
-              <MapPin className="w-8 h-8 text-green-500" />
+              <MapPin className="w-8 h-8 text-blue-500" />
               <div>
                 <h3 className="text-xl font-semibold">Address</h3>
                 <p className="text-gray-300">PICT, Pune, Maharashtra</p>
@@ -51,7 +51,7 @@ function Contact() {
             </div>
 
             <div className="flex items-center space-x-4">
-              <Phone className="w-8 h-8 text-green-500" />
+              <Phone className="w-8 h-8 text-blue-500" />
               <div>
                 <h3 className="text-xl font-semibold">Phone</h3>
                 <p className="text-gray-300">+91 1234567890</p>
@@ -59,7 +59,7 @@ function Contact() {
             </div>
 
             <div className="flex items-center space-x-4">
-              <Mail className="w-8 h-8 text-green-500" />
+              <Mail className="w-8 h-8 text-blue-500" />
               <div>
                 <h3 className="text-xl font-semibold">Email</h3>
                 <p className="text-gray-300">info@yieldvision.com</p>
@@ -81,7 +81,7 @@ function Contact() {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-3 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -95,7 +95,7 @@ function Contact() {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-3 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -109,14 +109,14 @@ function Contact() {
                   value={formData.message}
                   onChange={handleChange}
                   rows="4"
-                  className="w-full px-4 py-3 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-3 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 ></textarea>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-green-800 text-white py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                className="w-full bg-blue-800 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
               >
                 <Send size={20} />
                 {t.form.submit}

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { UserCog } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 function ProfileUpdatePopup({ isOpen, onClose }) {
   const navigate = useNavigate();
@@ -15,8 +15,8 @@ function ProfileUpdatePopup({ isOpen, onClose }) {
         className="bg-gray-800 rounded-2xl max-w-md w-full p-6"
       >
         <div className="flex flex-col items-center text-center">
-          <div className="bg-green-800/20 p-4 rounded-full mb-4">
-            <UserCog className="w-8 h-8 text-brand-green" />
+          <div className="bg-blue-800/20 p-4 rounded-full mb-4">
+            <UserCog className="w-8 h-8 text-brand-blue" />
           </div>
           <h2 className="text-2xl font-bold mb-2">Update Your Profile</h2>
           <p className="text-gray-300 mb-6">
@@ -28,7 +28,7 @@ function ProfileUpdatePopup({ isOpen, onClose }) {
                 onClose();
                 navigate('/profile');
               }}
-              className="px-6 py-2 bg-brand-green text-black rounded-lg hover:bg-opacity-90 transition-colors font-semibold"
+              className="px-6 py-2 bg-brand-blue text-black rounded-lg hover:bg-opacity-90 transition-colors font-semibold"
             >
               Update Profile
             </button>

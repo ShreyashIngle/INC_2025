@@ -8,7 +8,7 @@ export default {
       },
       colors: {
         brand: {
-          green: '#95C11E', // Nested 'brand' object for clarity
+          blue: '#95C11E', // Nested 'brand' object for clarity
         },
       },
       animation: {

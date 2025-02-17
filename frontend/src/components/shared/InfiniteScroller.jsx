@@ -14,7 +14,7 @@ function InfiniteScroller({ items }) {
             <motion.span
               key={`${item}-${index}`}
               whileHover={{ scale: 1.1 }}
-              className="text-2xl sm:text-3xl md:text-4xl font-bold mx-8 hover:text-brand-green transition-all duration-300 hover:glow cursor-default"
+              className="text-2xl sm:text-3xl md:text-4xl font-bold mx-8 hover:text-brand-blue transition-all duration-300 hover:glow cursor-default"
             >
               {item}
             </motion.span>
@@ -28,7 +28,7 @@ function InfiniteScroller({ items }) {
             <motion.span
               key={`${item}-${index}-duplicate`}
               whileHover={{ scale: 1.1 }}
-              className="text-xl sm:text-2xl md:text-3xl font-bold mx-8 hover:text-brand-green transition-all duration-300 hover:glow cursor-default"
+              className="text-xl sm:text-2xl md:text-3xl font-bold mx-8 hover:text-brand-blue transition-all duration-300 hover:glow cursor-default"
             >
               {item}
             </motion.span>

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Plus, Trash2, ExternalLink } from 'lucide-react';
 import axios from 'axios';
+import { motion } from 'framer-motion';
+import { ExternalLink, Plus, Trash2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 function DsaSheet() {
@@ -138,19 +138,19 @@ function DsaSheet() {
                   value={newTopic.name}
                   onChange={(e) => setNewTopic({ ...newTopic, name: e.target.value })}
                   placeholder="Topic Name"
-                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
                 <textarea
                   value={newTopic.description}
                   onChange={(e) => setNewTopic({ ...newTopic, description: e.target.value })}
                   placeholder="Topic Description"
-                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   rows="3"
                 />
                 <button
                   type="submit"
-                  className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                  className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
                 >
                   <Plus className="w-5 h-5" />
                   Create Topic
@@ -167,7 +167,7 @@ function DsaSheet() {
                   key={topic._id}
                   className={`p-4 rounded-lg cursor-pointer transition-colors ${
                     selectedTopic?._id === topic._id
-                      ? 'bg-green-600 text-white'
+                      ? 'bg-blue-600 text-white'
                       : 'bg-gray-700 hover:bg-gray-600'
                   }`}
                   onClick={() => setSelectedTopic(topic)}
@@ -202,7 +202,7 @@ function DsaSheet() {
                   value={newQuestion.title}
                   onChange={(e) => setNewQuestion({ ...newQuestion, title: e.target.value })}
                   placeholder="Question Title"
-                  className="px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
                 <input
@@ -210,7 +210,7 @@ function DsaSheet() {
                   value={newQuestion.link}
                   onChange={(e) => setNewQuestion({ ...newQuestion, link: e.target.value })}
                   placeholder="Question Link"
-                  className="px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
                 <input
@@ -218,13 +218,13 @@ function DsaSheet() {
                   value={newQuestion.platform}
                   onChange={(e) => setNewQuestion({ ...newQuestion, platform: e.target.value })}
                   placeholder="Platform (e.g., LeetCode, CodeForces)"
-                  className="px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
                 <select
                   value={newQuestion.difficulty}
                   onChange={(e) => setNewQuestion({ ...newQuestion, difficulty: e.target.value })}
-                  className="px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="Easy">Easy</option>
                   <option value="Medium">Medium</option>
@@ -232,7 +232,7 @@ function DsaSheet() {
                 </select>
                 <button
                   type="submit"
-                  className="md:col-span-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                  className="md:col-span-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
                 >
                   <Plus className="w-5 h-5" />
                   Add Question
@@ -251,7 +251,7 @@ function DsaSheet() {
                       <span
                         className={`inline-block px-2 py-1 text-xs rounded-full mt-2 ${
                           question.difficulty === 'Easy'
-                            ? 'bg-green-500/20 text-green-500'
+                            ? 'bg-blue-500/20 text-blue-500'
                             : question.difficulty === 'Medium'
                             ? 'bg-yellow-500/20 text-yellow-500'
                             : 'bg-red-500/20 text-red-500'

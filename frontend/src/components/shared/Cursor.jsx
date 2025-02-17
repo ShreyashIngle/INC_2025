@@ -15,12 +15,12 @@ function Cursor() {
 
     const handleHover = () => {
       cursor.classList.add('scale-[3]', 'border-white', 'bg-transparent');
-      cursor.classList.remove('scale-100', 'border-0', 'bg-brand-green');
+      cursor.classList.remove('scale-100', 'border-0', 'bg-brand-blue');
     };
 
     const handleUnhover = () => {
       cursor.classList.remove('scale-[3]', 'border-white', 'bg-transparent');
-      cursor.classList.add('scale-100', 'border-0', 'bg-brand-green');
+      cursor.classList.add('scale-100', 'border-0', 'bg-brand-blue');
     };
 
     document.addEventListener('mousemove', moveCursor);
@@ -44,11 +44,11 @@ function Cursor() {
     <>
       <div
         ref={cursorRef}
-        className="fixed w-5 h-5 rounded-full pointer-events-none z-50 transition-none duration-100 ease-out -translate-x-1/2 -translate-y-1/2 bg-brand-green"
+        className="fixed w-5 h-5 rounded-full pointer-events-none z-50 transition-none duration-100 ease-out -translate-x-1/2 -translate-y-1/2 bg-brand-blue"
       />
       <div
         ref={cursorBlurRef}
-        className="fixed w-[500px] h-[500px] rounded-full pointer-events-none z-10 bg-brand-green/30 blur-[180px] transition-none duration-300"
+        className="fixed w-[500px] h-[500px] rounded-full pointer-events-none z-10 bg-brand-blue/30 blur-[180px] transition-none duration-300"
       />
     </>
   );
