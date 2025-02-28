@@ -120,7 +120,7 @@ function Login() {
                     onChange={handleChange}
                     className="form-radio text-brand-blue"
                   />
-                  <span>Farmer</span>
+                  <span>Student</span>
                 </label>
                 <label className="flex items-center space-x-2 text-gray-700">
                   <input
@@ -131,7 +131,7 @@ function Login() {
                     onChange={handleChange}
                     className="form-radio text-brand-blue"
                   />
-                  <span>Enterprise</span>
+                  <span>Admin</span>
                 </label>
               </div>
             </div>

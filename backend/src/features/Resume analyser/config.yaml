@@ -1,0 +1,4 @@
+
+MODEL: "gemini-pro"  # Keep it configurable for future updates
+TEMPERATURE: 0.2
+MAX_TOKENS: 2000
