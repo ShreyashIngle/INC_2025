@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "concurrently \"npm run start-node\" \"npm run start-fastapi\"",
-    "start-fastapi": "set PYTHONPATH=src && uvicorn npk.main:app --reload",
+    "start-fastapi": "cross-env PYTHONPATH=src uvicorn features.resume_analyzer.main:app --reload",
     "start-node": "node src/index.js",
     "dev": "nodemon src/index.js"
   },
@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
     "nodemon": "^3.1.0"
   }
 }
