@@ -9,6 +9,7 @@ import userRoutes from './routes/user.js';
 import dsaRoutes from './routes/dsa.js';
 import sessionRoutes from './routes/sessions.js';
 import companyRoutes from './routes/companies.js';
+import resumeAnalyzerRoutes from './routes/resumeAnalyzer.js';
 import morgan from 'morgan';
 import multer from 'multer';
 
@@ -70,6 +71,7 @@ app.use('/api/user', (req, res, next) => {
 app.use('/api/dsa', dsaRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/companies', companyRoutes);
+app.use('/api/resume-analyzer', resumeAnalyzerRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
