@@ -10,6 +10,9 @@ from flask import Flask, request, render_template, jsonify
 from werkzeug.utils import secure_filename
 import google.generativeai as genai
 from typing import List, Dict
+from dotenv import load_dotenv
+load_dotenv()
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -40,7 +43,7 @@ def load_config(config_path: str = 'config.yaml') -> Dict:
 
 # Configure Gemini API
 def configure_gemini_api(config: Dict) -> None:
-    api_key = config.get('GEMINI_API_KEY')
+    api_key = os.getenv('GEMINI_API_KEY')
     if not api_key:
         raise ValueError("Missing Gemini API key")
     genai.configure(api_key=api_key)
