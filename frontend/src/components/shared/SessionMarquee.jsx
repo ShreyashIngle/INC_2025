@@ -22,7 +22,7 @@ function SessionMarquee() {
     };
 
     fetchSessions();
-    const interval = setInterval(fetchSessions, 60000);
+    const interval = setInterval(fetchSessions, 2000);
     return () => clearInterval(interval);
   }, []);
 
