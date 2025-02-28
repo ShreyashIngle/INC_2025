@@ -14,6 +14,7 @@ import ForgotPassword from '../pages/ForgotPassword';
 import DsaSheet from '../pages/dashboard/DsaSheet';
 import Sessions from '../pages/dashboard/Sessions';
 import PlacementCalendar from '../pages/dashboard/PlacementCalendar';
+import ResumeAnalyzer from '../pages/dashboard/ResumeAnalyzer';
 
 const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'], readOnly = false }) => {
   const token = localStorage.getItem('token');
@@ -55,6 +56,10 @@ export const router = createBrowserRouter([
           {
             path: 'placement-calendar',
             element: <ProtectedRoute allowedRoles={['farmer', 'enterprise']} readOnly={true}><PlacementCalendar /></ProtectedRoute>
+          },
+          {
+            path: 'resume-analyzer',
+            element: <ProtectedRoute allowedRoles={['farmer']}><ResumeAnalyzer /></ProtectedRoute>
           }
         ]
       },

@@ -6,15 +6,15 @@ import fitz  # PyMuPDF
 import pandas as pd
 import re
 import nltk
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.templating import Jinja2Templates
-from werkzeug.utils import secure_filename
+import argparse
+from fastapi import FastAPI
 import google.generativeai as genai
 from typing import List, Dict
 from dotenv import load_dotenv
+
 load_dotenv()
 
+app = FastAPI()
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -42,8 +42,7 @@ def load_config(config_path: str = 'config.yaml') -> Dict:
         logger.error(f"YAML configuration error: {e}")
         raise
 
-# Configure Gemini API
-def configure_gemini_api(config: Dict) -> None:
+def configure_gemini_api() -> None:
     api_key = os.getenv('GEMINI_API_KEY')
     if not api_key:
         raise ValueError("Missing Gemini API key")
@@ -99,86 +98,102 @@ def check_skills_match(candidate_skills: List[str], required_skills: str) -> Lis
     candidate_skills_lower = [skill.lower() for skill in candidate_skills]
     return [skill for skill in required_skills_list if skill not in candidate_skills_lower]
 
-# Create uploads folder if it doesn't exist
-UPLOAD_FOLDER = 'uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+# Check eligibility based on academic criteria
+def check_eligibility(company_row, cgpa, hsc, ssc, branch):
+    eligible = True
+    reasons = []
+    
+    # Check CGPA
+    if 'CGPA' in company_row and company_row['CGPA'] > 0:
+        if float(cgpa) < company_row['CGPA']:
+            eligible = False
+            reasons.append(f"CGPA requirement not met: {cgpa} < {company_row['CGPA']}")
+    
+    # Check HSC
+    if 'HSC' in company_row and company_row['HSC'] > 0:
+        if float(hsc) < company_row['HSC']:
+            eligible = False
+            reasons.append(f"12th percentage requirement not met: {hsc} < {company_row['HSC']}")
+    
+    # Check SSC
+    if 'SSC' in company_row and company_row['SSC'] > 0:
+        if float(ssc) < company_row['SSC']:
+            eligible = False
+            reasons.append(f"10th percentage requirement not met: {ssc} < {company_row['SSC']}")
+    
+    # Check Branch
+    if 'Branch' in company_row and company_row['Branch']:
+        eligible_branches = [b.strip() for b in company_row['Branch'].split(',')]
+        if branch not in eligible_branches:
+            eligible = False
+            reasons.append(f"Branch {branch} not in eligible branches: {', '.join(eligible_branches)}")
+    
+    return eligible, reasons
 
-# Load configuration and set up Gemini API
-try:
-    config = load_config()
-    configure_gemini_api(config)
-except Exception as e:
-    logger.critical(f"Failed to start due to configuration error: {e}")
-    raise
-
-# Load company data from CSV
-try:
-    df = pd.read_csv("company_data.csv")
-    company_names = df["Company Name"].dropna().unique().tolist()
-except FileNotFoundError:
-    logger.error("company_data.csv not found.")
-    df = pd.DataFrame()
-    company_names = []
-except Exception as e:
-    logger.error(f"Error loading company data: {e}")
-    df = pd.DataFrame()
-    company_names = []
-
-# Create FastAPI app and template configuration
-app = FastAPI()
-templates = Jinja2Templates(directory="templates")
-
-@app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "company_names": company_names})
-
-@app.post("/process")
-async def process_resume(company: str = Form(...), cv: UploadFile = File(...)):
+def process_resume(company_name, cv_path, cgpa, hsc, ssc, branch):
     try:
-        # Validate file upload
-        if not cv or cv.filename == '':
-            raise HTTPException(status_code=400, detail="No CV file uploaded.")
+        # Load configuration and set up Gemini API
+        config = load_config()
+        configure_gemini_api()  # Fixed: removed the config parameter
         
-        filename = secure_filename(cv.filename)
-        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        # Load company data
+        df = pd.read_csv("company_data.csv")
         
-        # Save the uploaded file
-        with open(file_path, "wb") as f:
-            content = await cv.read()
-            f.write(content)
+        # Check if company exists
+        company_row = df[df["Company Name"] == company_name]
+        if company_row.empty:
+            return {"error": "Company not found."}
+        
+        company_data = company_row.iloc[0].to_dict()
         
         # Extract text from PDF
-        cv_text = extract_pdf_text(file_path)
+        cv_text = extract_pdf_text(cv_path)
         if not cv_text:
-            raise HTTPException(status_code=500, detail="Failed to extract text from CV.")
+            return {"error": "Failed to extract text from CV."}
         
         # Parse resume to extract skills
         extracted_skills = parse_resume(cv_text, config)
         logger.info(f"Extracted skills from CV: {extracted_skills}")
         
-        if company not in company_names:
-            raise HTTPException(status_code=404, detail="Company not found.")
-        
-        company_row = df[df["Company Name"] == company]
-        if company_row.empty:
-            raise HTTPException(status_code=404, detail="Company data not found.")
-        
         # Get required skills from the company row if available
-        required_skills = company_row["Skills Required"].iloc[0] if "Skills Required" in company_row.columns else ""
+        required_skills = company_data.get("Skills Required", "")
         missing_skills = check_skills_match(extracted_skills, required_skills)
         
-        return {
-            "eligibility": "Eligible",
+        # Check eligibility based on academic criteria
+        eligible, reasons = check_eligibility(company_data, cgpa, hsc, ssc, branch)
+        
+        result = {
+            "eligibility": "Eligible" if eligible else "Not Eligible",
             "skills": extracted_skills,
             "missing_skills": missing_skills,
+            "reasons": reasons if not eligible else []
         }
-    except HTTPException as http_exc:
-        # Re-raise HTTP exceptions directly
-        raise http_exc
+        
+        return result
     except Exception as e:
         logger.error(f"Processing error: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        return {"error": f"Internal server error: {str(e)}"}
+
+# FastAPI endpoints
+@app.get("/")
+def read_root():
+    return {"message": "Resume Analyzer API"}
+
+@app.post("/analyze")
+async def analyze_resume(company_name: str, cv_path: str, cgpa: float, hsc: float, ssc: float, branch: str):
+    result = process_resume(company_name, cv_path, cgpa, hsc, ssc, branch)
+    return result
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    parser = argparse.ArgumentParser(description='Process resume for job application')
+    parser.add_argument('--company', required=True, help='Company name')
+    parser.add_argument('--cv', required=True, help='Path to CV file')
+    parser.add_argument('--cgpa', required=True, help='CGPA')
+    parser.add_argument('--hsc', required=True, help='12th percentage')
+    parser.add_argument('--ssc', required=True, help='10th percentage')
+    parser.add_argument('--branch', required=True, help='Branch')
+    
+    args = parser.parse_args()
+    
+    result = process_resume(args.company, args.cv, args.cgpa, args.hsc, args.ssc, args.branch)
+    print(json.dumps(result))
