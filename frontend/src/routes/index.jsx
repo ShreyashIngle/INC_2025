@@ -15,6 +15,7 @@ import DsaSheet from '../pages/dashboard/DsaSheet';
 import Sessions from '../pages/dashboard/Sessions';
 import PlacementCalendar from '../pages/dashboard/PlacementCalendar';
 import ResumeAnalyzer from '../pages/dashboard/ResumeAnalyzer';
+import AtsScore from '../pages/dashboard/AtsScore';
 
 const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'], readOnly = false }) => {
   const token = localStorage.getItem('token');
@@ -60,6 +61,10 @@ export const router = createBrowserRouter([
           {
             path: 'resume-analyzer',
             element: <ProtectedRoute allowedRoles={['farmer']}><ResumeAnalyzer /></ProtectedRoute>
+          },
+          {
+            path: 'ats-score',
+            element: <ProtectedRoute allowedRoles={['farmer']}><AtsScore /></ProtectedRoute>
           }
         ]
       },
