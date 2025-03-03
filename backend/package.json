@@ -1,7 +1,7 @@
 {
-  "name": "yieldvision-backend",
+  "name": "prepgenius-backend",
   "version": "1.0.0",
-  "description": "Backend for YieldVision application",
+  "description": "Backend for PrepGenius application",
   "main": "src/index.js",
   "type": "module",
   "scripts": {

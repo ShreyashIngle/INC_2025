@@ -48,7 +48,7 @@ export const translations = {
     },
     footer: {
       description:
-        'Making yield prediction and farming insights accessible to everyone.',
+        'Making placement journey easier for everyone with resume analyzer, placement calendar, DSA sheet, and more.',
       quickLinks: 'Quick Links',
       contact: 'Contact',
       followUs: 'Follow Us',

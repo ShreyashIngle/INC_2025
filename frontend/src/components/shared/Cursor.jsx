@@ -44,11 +44,11 @@ function Cursor() {
     <>
       <div
         ref={cursorRef}
-        className="fixed w-5 h-5 rounded-full pointer-events-none z-50 transition-none duration-100 ease-out -translate-x-1/2 -translate-y-1/2 bg-brand-blue"
+        className="fixed w-5 h-5 rounded-full pointer-events-none z-50 transition-none duration-100 ease-out -translate-x-1/2 -translate-y-1/2 bg-blue-500"
       />
       <div
         ref={cursorBlurRef}
-        className="fixed w-[500px] h-[500px] rounded-full pointer-events-none z-10 bg-brand-blue/30 blur-[180px] transition-none duration-300"
+        className="fixed w-[500px] h-[500px] rounded-full pointer-events-none z-10 bg-blue-500/30 blur-[180px] transition-none duration-300"
       />
     </>
   );
