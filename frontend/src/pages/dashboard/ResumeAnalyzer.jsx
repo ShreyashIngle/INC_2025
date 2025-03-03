@@ -309,17 +309,17 @@ function ResumeAnalyzer() {
             <div className="space-y-6">
               <div className={`p-4 rounded-lg flex items-start ${
                 result.eligibility === 'Eligible' 
-                  ? 'bg-green-900/20 border border-green-500' 
+                  ? 'bg-blue-900/20 border border-blue-500' 
                   : 'bg-red-900/20 border border-red-500'
               }`}>
                 {result.eligibility === 'Eligible' ? (
-                  <CheckCircle className="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="w-6 h-6 text-blue-500 mr-3 flex-shrink-0 mt-0.5" />
                 ) : (
                   <AlertCircle className="w-6 h-6 text-red-500 mr-3 flex-shrink-0 mt-0.5" />
                 )}
                 <div>
                   <h3 className={`text-lg font-semibold ${
-                    result.eligibility === 'Eligible' ? 'text-green-500' : 'text-red-500'
+                    result.eligibility === 'Eligible' ? 'text-blue-500' : 'text-red-500'
                   }`}>
                     {result.eligibility}
                   </h3>
