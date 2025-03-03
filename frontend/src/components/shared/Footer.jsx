@@ -28,7 +28,7 @@ function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4">{t.quickLinks}</h3>
             <ul className="space-y-2">
-              {['Satellite Yield Prediction', 'Crop Health Monitoring', 'Precision Agriculture Solutions'].map((item) => (
+              {['Resume Analyser', 'Placement Calendar', 'DSA Sheet'].map((item) => (
                 <li key={item}>
                   <motion.a
                     href="#"
@@ -51,11 +51,11 @@ function Footer() {
               </li>
               <li className="flex items-center text-gray-300">
                 <Phone className="mr-2" size={20} />
-                0208 309 0181
+                9876543210
               </li>
               <li className="flex items-center text-gray-300">
                 <Mail className="mr-2" size={20} />
-                info@yieldivision.com
+                info@prepGenius.com
               </li>
             </ul>
           </div>
@@ -78,7 +78,7 @@ function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-white/10 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} yieldivision. {t.allRightsReserved}</p>
+          <p>&copy; {new Date().getFullYear()} PrepGenius. {t.allRightsReserved}</p>
         </div>
       </div>
     </footer>
