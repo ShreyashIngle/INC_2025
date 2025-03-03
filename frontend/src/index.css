@@ -17,11 +17,11 @@ body {
 }
 
 ::selection {
-  @apply bg-white text-brand-blue;
+  @apply bg-white bg-blue-500;
 }
 
 ::-webkit-scrollbar {
-  @apply w-2 bg-brand-blue;
+  @apply w-2 bg-blue-500;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -42,9 +42,9 @@ body {
 }
 
 .hover-glow:hover {
-  text-shadow: 0 0 10px theme('colors.brand.blue'),
-               0 0 20px theme('colors.brand.blue'),
-               0 0 30px theme('colors.brand.blue');
+  text-shadow: 0 0 10px blue,
+               0 0 20px blue,
+               0 0 30px blue;
 }
 
 .glow {
@@ -73,6 +73,6 @@ a, button, .interactive {
 }
 
 .card-hover:hover {
-  @apply shadow-xl shadow-brand-blue/20;
+  @apply shadow-xl shadow-blue-500/20;
   transform: translateY(-5px) scale(1.02);
 }
