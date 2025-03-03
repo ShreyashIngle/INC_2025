@@ -10,6 +10,7 @@ import dsaRoutes from './routes/dsa.js';
 import sessionRoutes from './routes/sessions.js';
 import companyRoutes from './routes/companies.js';
 import resumeAnalyzerRoutes from './routes/resumeAnalyzer.js';
+import atsScoreRoutes from './routes/atsScore.js';
 import morgan from 'morgan';
 import multer from 'multer';
 
@@ -72,6 +73,7 @@ app.use('/api/dsa', dsaRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/companies', companyRoutes);
 app.use('/api/resume-analyzer', resumeAnalyzerRoutes);
+app.use('/api/ats-score', atsScoreRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
