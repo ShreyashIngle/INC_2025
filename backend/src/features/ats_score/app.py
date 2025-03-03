@@ -1,5 +1,6 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from flask_cors import CORS
 from dotenv import load_dotenv
 import google.generativeai as genai
 from PyPDF2 import PdfReader
@@ -11,6 +12,7 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # Flask app setup
 app = Flask(__name__)
+CORS(app)  # Enable CORS for API requests
 app.secret_key = "supersecretkey"  # For flash messages
 UPLOAD_FOLDER = "uploads"
 ALLOWED_EXTENSIONS = {"pdf"}
@@ -40,15 +42,23 @@ def home():
 
 @app.route("/analyze", methods=["POST"])
 def analyze_resume():
+    # Check if request is from web or API
+    is_api_request = request.headers.get('Content-Type', '').startswith('multipart/form-data') and \
+                    not request.headers.get('Content-Type', '').startswith('multipart/form-data; boundary=----WebKitFormBoundary')
+    
     if "resume" not in request.files:
+        if is_api_request:
+            return jsonify({"error": "No file uploaded"}), 400
         flash("No file uploaded!", "danger")
         return redirect(url_for("home"))
 
     uploaded_file = request.files["resume"]
     job_description = request.form.get("job_description", "").strip()
-    analysis_option = request.form.get("analysis_option")
+    analysis_option = request.form.get("analysis_option", "Quick Scan")
 
     if uploaded_file.filename == "" or not allowed_file(uploaded_file.filename):
+        if is_api_request:
+            return jsonify({"error": "Invalid file! Please upload a PDF."}), 400
         flash("Invalid file! Please upload a PDF.", "danger")
         return redirect(url_for("home"))
 
@@ -59,7 +69,7 @@ def analyze_resume():
 
     # Extract text from the PDF
     pdf_text = read_pdf(file_path)
-
+    
     # Define prompts for different analysis types
     if analysis_option == "Quick Scan":
         prompt = f"""
@@ -98,11 +108,35 @@ def analyze_resume():
         Job Description: {job_description}
         """
 
-    # Get AI response
-    response = get_gemini_output(pdf_text, prompt)
-
-    # Render results on a new page
-    return render_template("result.html", response=response)
+    try:
+        # Get AI response
+        response = get_gemini_output(pdf_text, prompt)
+        
+        # Clean up the file
+        try:
+            os.remove(file_path)
+        except:
+            pass
+            
+        # Return JSON response for API requests
+        if is_api_request:
+            return jsonify({"response": response})
+        
+        # Render template for web requests
+        return render_template("result.html", response=response)
+        
+    except Exception as e:
+        # Clean up the file in case of error
+        try:
+            os.remove(file_path)
+        except:
+            pass
+            
+        if is_api_request:
+            return jsonify({"error": str(e)}), 500
+            
+        flash(f"Error analyzing resume: {str(e)}", "danger")
+        return redirect(url_for("home"))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5000)
