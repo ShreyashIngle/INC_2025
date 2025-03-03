@@ -36,17 +36,34 @@ def load_config(config_path: str = 'config.yaml') -> Dict:
             return yaml.safe_load(file)
     except FileNotFoundError as e:
         logger.error(f"Configuration file not found: {e}")
-        raise
+        # Create a default configuration
+        return {"MODEL": "gemini-pro"}
     except yaml.YAMLError as e:
         logger.error(f"YAML configuration error: {e}")
-        raise
+        return {"MODEL": "gemini-pro"}
 
 # Configure Gemini API
-def configure_gemini_api(config: Dict) -> None:
+def configure_gemini_api() -> None:
     api_key = os.getenv('GEMINI_API_KEY')
     if not api_key:
         raise ValueError("Missing Gemini API key")
     genai.configure(api_key=api_key)
+
+# Load company data safely
+def load_company_data(csv_path: str = 'company_data.csv') -> (pd.DataFrame, List[str]):
+    try:
+        df = pd.read_csv(csv_path)
+        company_names = df["Company Name"].dropna().unique().tolist()
+        return df, company_names
+    except FileNotFoundError:
+        logger.error(f"Company data file not found: {csv_path}")
+        # Create an empty DataFrame with expected columns
+        df = pd.DataFrame(columns=["Company Name", "Skills Required", "CGPA", "HSC", "SSC", "Branch"])
+        return df, []
+    except Exception as e:
+        logger.error(f"Error loading company data: {e}")
+        df = pd.DataFrame(columns=["Company Name", "Skills Required", "CGPA", "HSC", "SSC", "Branch"])
+        return df, []
 
 # PDF text extraction
 def extract_pdf_text(file_path: str) -> str:
@@ -98,6 +115,38 @@ def check_skills_match(candidate_skills: List[str], required_skills: str) -> Lis
     candidate_skills_lower = [skill.lower() for skill in candidate_skills]
     return [skill for skill in required_skills_list if skill not in candidate_skills_lower]
 
+# Check eligibility based on academic criteria
+def check_eligibility(company_row, cgpa, hsc, ssc, branch):
+    eligible = True
+    reasons = []
+    
+    # Check CGPA
+    if 'CGPA' in company_row and company_row['CGPA'] > 0:
+        if float(cgpa) < company_row['CGPA']:
+            eligible = False
+            reasons.append(f"CGPA requirement not met: {cgpa} < {company_row['CGPA']}")
+    
+    # Check HSC
+    if 'HSC' in company_row and company_row['HSC'] > 0:
+        if float(hsc) < company_row['HSC']:
+            eligible = False
+            reasons.append(f"12th percentage requirement not met: {hsc} < {company_row['HSC']}")
+    
+    # Check SSC
+    if 'SSC' in company_row and company_row['SSC'] > 0:
+        if float(ssc) < company_row['SSC']:
+            eligible = False
+            reasons.append(f"10th percentage requirement not met: {ssc} < {company_row['SSC']}")
+    
+    # Check Branch
+    if 'Branch' in company_row and company_row['Branch']:
+        eligible_branches = [b.strip() for b in company_row['Branch'].split(',')]
+        if branch not in eligible_branches:
+            eligible = False
+            reasons.append(f"Branch {branch} not in eligible branches: {', '.join(eligible_branches)}")
+    
+    return eligible, reasons
+
 # Create Flask app
 def create_app():
     app = Flask(__name__)
@@ -106,22 +155,13 @@ def create_app():
     
     try:
         config = load_config()
-        configure_gemini_api(config)
+        configure_gemini_api()
     except Exception as e:
         logger.critical(f"Failed to start due to configuration error: {e}")
         raise  
     
-    try:
-        df = pd.read_csv("company_data.csv")
-        company_names = df["Company Name"].dropna().unique().tolist()
-    except FileNotFoundError:
-        logger.error("company_data.csv not found.")
-        df = pd.DataFrame()
-        company_names = []
-    except Exception as e:
-        logger.error(f"Error loading company data: {e}")
-        df = pd.DataFrame()
-        company_names = []
+    # Load company data
+    df, company_names = load_company_data()
     
     @app.route('/')
     def index():
@@ -132,6 +172,10 @@ def create_app():
         try:
             company = request.form.get("company")
             cv = request.files.get("cv")
+            cgpa = request.form.get("cgpa", 0.0)
+            hsc = request.form.get("hsc", 0.0)
+            ssc = request.form.get("ssc", 0.0)
+            branch = request.form.get("branch", "")
             
             if not cv or cv.filename == '':
                 return jsonify({"error": "No CV file uploaded."}), 400
@@ -155,18 +199,24 @@ def create_app():
             if company_row.empty:
                 return jsonify({"error": "Company data not found."}), 404
 
-            required_skills = company_row["Skills Required"].iloc[0] if "Skills Required" in company_row else ""
+            company_data = company_row.iloc[0].to_dict()
+            
+            required_skills = company_data.get("Skills Required", "")
             missing_skills = check_skills_match(extracted_skills, required_skills)
+            
+            # Check eligibility based on academic criteria if form fields are provided
+            eligible, reasons = check_eligibility(company_data, cgpa, hsc, ssc, branch)
 
             return jsonify({
-                "eligibility": "Eligible",
+                "eligibility": "Eligible" if eligible else "Not Eligible",
                 "skills": extracted_skills,
                 "missing_skills": missing_skills,
+                "reasons": reasons if not eligible else []
             })
         
         except Exception as e:
             logger.error(f"Processing error: {e}")
-            return jsonify({"error": "Internal server error"}), 500
+            return jsonify({"error": f"Internal server error: {str(e)}"}), 500
     
     return app
 
