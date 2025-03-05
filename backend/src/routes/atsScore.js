@@ -4,7 +4,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { authenticate } from '../middleware/auth.js';
 import fs from 'fs';
-import FormData from 'form-data';
 import axios from 'axios';
 
 const router = express.Router();
@@ -26,7 +25,6 @@ const storage = multer.diskStorage({
     cb(null, UPLOADS_DIR);
   },
   filename: function (_, file, cb) {
-    // Use timestamp to ensure unique filenames
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     const ext = path.extname(file.originalname);
     cb(null, file.fieldname + '-' + uniqueSuffix + ext);
@@ -47,32 +45,41 @@ const upload = multer({
   }
 });
 
+// Create form data helper for axios
+const createFormData = (file, jobDescription, analysisOption) => {
+  const formData = new FormData();
+  formData.append('resume', fs.createReadStream(file.path), {
+    filename: file.originalname,
+    contentType: 'application/pdf'
+  });
+  formData.append('job_description', jobDescription || '');
+  formData.append('analysis_option', analysisOption || 'Quick Scan');
+  return formData;
+};
+
 // Route to analyze resume
-router.post('/analyze', authenticate, upload.single('resume'), async (req, res) => {
+router.post('/score', authenticate, upload.single('resume'), async (req, res) => {
   try {
+    // Validate file upload
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    // Use proper FormData for Node.js
-    const formData = new FormData();
-    
-    // Append the file from disk
-    formData.append('resume', fs.createReadStream(req.file.path), {
-      filename: req.file.originalname,
-      contentType: 'application/pdf'
-    });
-    
-    // Add other form fields
-    formData.append('job_description', req.body.job_description || '');
-    formData.append('analysis_option', req.body.analysis_option || 'Quick Scan');
+    // Prepare form data
+    const formData = createFormData(
+      req.file, 
+      req.body.job_description, 
+      req.body.analysis_option
+    );
 
     try {
-      // Make request to Flask backend (not FastAPI)
-      const response = await axios.post('http://localhost:5000/analyze', formData, {
+      // Make request to FastAPI backend
+      const response = await axios.post('http://localhost:8000/score', formData, {
         headers: {
           ...formData.getHeaders()
         },
+        maxBodyLength: Infinity,
+        maxContentLength: Infinity
       });
 
       // Clean up the uploaded file
@@ -82,29 +89,43 @@ router.post('/analyze', authenticate, upload.single('resume'), async (req, res) 
         success: true,
         analysis: response.data.response || response.data
       });
-    } catch (error) {
-      console.error('Error communicating with backend service:', error);
+    } catch (backendError) {
+      console.error('Backend communication error:', backendError);
       
-      // Clean up the uploaded file in case of error
+      // Clean up file in case of error
       if (req.file && fs.existsSync(req.file.path)) {
         fs.unlinkSync(req.file.path);
       }
       
       return res.status(500).json({ 
         error: 'Failed to analyze resume', 
-        details: error.message 
+        details: backendError.response?.data || backendError.message 
       });
     }
   } catch (error) {
     console.error('Resume analysis error:', error);
     
-    // Clean up the uploaded file in case of error
+    // Ensure file is cleaned up
     if (req.file && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
     
-    res.status(500).json({ error: 'Internal server error', message: error.message });
+    res.status(500).json({ 
+      error: 'Internal server error', 
+      message: error.message 
+    });
   }
+});
+
+// Additional route for getting analysis options
+router.get('/analysis-options', authenticate, (req, res) => {
+  res.json({
+    options: [
+      'Quick Scan',
+      'Detailed Analysis', 
+      'ATS Optimization'
+    ]
+  });
 });
 
 export default router;

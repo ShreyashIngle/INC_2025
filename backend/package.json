@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "concurrently \"npm run start-node\" \"npm run start-fastapi\"",
-    "start-fastapi": "cross-env PYTHONPATH=src uvicorn features.resume_analyzer.main:app --reload",
+    "start-fastapi": "cross-env PYTHONPATH=src uvicorn src.features.main:app --reload",
     "start-node": "node src/index.js",
     "dev": "nodemon src/index.js"
   },
@@ -17,6 +17,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.2",
     "express-validator": "^7.0.1",
+    "form-data": "^4.0.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.0",
     "morgan": "^1.10.0",
