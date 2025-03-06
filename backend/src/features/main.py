@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, project_root)
 
-# Correct import paths
+# Import the feature apps
 from src.features.resume_analyzer.app import app as resume_analyzer_app
 from src.features.ats_score.app import app as ats_score_app
 
@@ -23,6 +23,7 @@ app = FastAPI(
 origins = [
     "http://localhost",
     "http://localhost:3000",
+    "http://localhost:5173",  # Vite's default port
     "http://localhost:8000",
     "https://yourdomain.com"
 ]
@@ -49,8 +50,6 @@ def read_root():
             "/ats/score - ATS Scoring"
         ]
     }
-
-
 
 # Server configuration for direct running
 if __name__ == "__main__":

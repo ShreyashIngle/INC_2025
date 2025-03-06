@@ -7,10 +7,10 @@ import re
 import json
 import nltk
 import google.generativeai as genai
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException
+from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Optional, Dict, List
+from typing import Optional, List
 from dotenv import load_dotenv
 from pydantic import BaseModel
 
