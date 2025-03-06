@@ -49,7 +49,7 @@ function AtsScore() {
       formData.append('analysis_option', analysisOption);
 
       const response = await axios.post(
-        'http://localhost:5000/api/ats-score/analyze',
+        'http://localhost:8000/ats-score/ats_analyze',
         formData,
         {
           headers: {

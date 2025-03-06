@@ -50,16 +50,7 @@ def read_root():
         ]
     }
 
-# Health check endpoint
-@app.get("/health")
-def health_check():
-    return {
-        "status": "healthy",
-        "services": {
-            "resume_analyzer": "operational",
-            "ats_score": "operational"
-        }
-    }
+
 
 # Server configuration for direct running
 if __name__ == "__main__":

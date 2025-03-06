@@ -28,7 +28,7 @@ function ResumeAnalyzer() {
   const fetchCompanies = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/resume-analyzer/companies', {
+      const response = await axios.get('http://localhost:8000/api/resume-analyzer/companies', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCompanies(response.data.companies);
@@ -69,11 +69,11 @@ function ResumeAnalyzer() {
       toast.error('Please upload a resume');
       return;
     }
-
+  
     setIsLoading(true);
     setResult(null);
     setError(null);
-
+  
     try {
       const token = localStorage.getItem('token');
       const formDataToSend = new FormData();
@@ -83,9 +83,9 @@ function ResumeAnalyzer() {
       formDataToSend.append('cgpa', formData.cgpa);
       formDataToSend.append('branch', formData.branch);
       formDataToSend.append('cv', file);
-
+  
       const response = await axios.post(
-        'http://localhost:5000/api/resume-analyzer/process',
+        'http://localhost:8000/resume/analyze',
         formDataToSend,
         {
           headers: {
@@ -94,7 +94,7 @@ function ResumeAnalyzer() {
           }
         }
       );
-
+  
       setResult(response.data);
       toast.success('Resume analyzed successfully');
     } catch (error) {
@@ -105,6 +105,7 @@ function ResumeAnalyzer() {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="p-8">
