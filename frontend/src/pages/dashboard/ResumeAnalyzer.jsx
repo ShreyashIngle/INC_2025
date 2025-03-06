@@ -28,7 +28,7 @@ function ResumeAnalyzer() {
   const fetchCompanies = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8000/api/resume-analyzer/companies', {
+      const response = await axios.get('http://localhost:8000/resume/companies', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCompanies(response.data.companies);
@@ -82,7 +82,7 @@ function ResumeAnalyzer() {
       formDataToSend.append('hsc', formData.hsc);
       formDataToSend.append('cgpa', formData.cgpa);
       formDataToSend.append('branch', formData.branch);
-      formDataToSend.append('cv', file);
+      formDataToSend.append('resume', file);
   
       const response = await axios.post(
         'http://localhost:8000/resume/analyze',
@@ -105,7 +105,6 @@ function ResumeAnalyzer() {
       setIsLoading(false);
     }
   };
-  
 
   return (
     <div className="p-8">
