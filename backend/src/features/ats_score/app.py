@@ -2,12 +2,19 @@ import os
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 import google.generativeai as genai
 from PyPDF2 import PdfReader
 from werkzeug.utils import secure_filename
 from typing import Optional
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+api_key = os.getenv("GEMINI_API_KEY")
+print("API Key:", api_key)  # This should print your API key
+
 
 # Load API key from .env
 load_dotenv()
@@ -26,7 +33,8 @@ app.add_middleware(
 )
 
 # Configure upload folder
-UPLOAD_FOLDER = "uploads"
+UPLOAD_FOLDER = os.path.join(
+    "src", "features", "resume_analyzer", "uploads")
 ALLOWED_EXTENSIONS = {"pdf"}
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Ensure upload folder exists
 
@@ -42,11 +50,11 @@ def read_pdf(file_path: str) -> str:
 
 # Function to get AI response from Gemini
 def get_gemini_output(pdf_text: str, prompt: str) -> str:
-    model = genai.GenerativeModel("gemini-1.5-flash")
-    response = model.generate_content([pdf_text, prompt])
-    return response.text
+    model = genai.GenerativeModel("gemini-1.5-pro-latest")  # Update model
+    response = model.generate_content(f"{prompt}\n\n{pdf_text}")
+    return response.text  # Ensure correct attribute
 
-@app.post("/ats_analyze")
+@app.post("/score")
 async def analyze_resume(
     resume: UploadFile = File(...),
     job_description: Optional[str] = Form(""),
@@ -110,75 +118,9 @@ async def analyze_resume(
     
     return JSONResponse(content={"response": response})
 
-@app.post("/score")
-async def score_resume(
-    resume: UploadFile = File(...),
-    job_description: Optional[str] = Form(""),
-    analysis_option: str = Form("Quick Scan")
-):
-    if not allowed_file(resume.filename):
-        raise HTTPException(status_code=400, detail="Invalid file! Please upload a PDF.")
-    
-    # Securely save the uploaded file
-    filename = secure_filename(resume.filename)
-    file_path = os.path.join(UPLOAD_FOLDER, filename)
-    with open(file_path, "wb") as f:
-        f.write(await resume.read())
-    
-    # Extract text from PDF
-    pdf_text = read_pdf(file_path)
-
-    # Define analysis prompts
-    analysis_prompts = {
-        "Quick Scan": f"""
-        Quickly analyze the resume:
-        - Identify most suitable profession
-        - List 3 key strengths
-        - Suggest 2 quick improvements
-        - Provide ATS score out of 100
-        
-        Resume: {pdf_text}
-        Job Description: {job_description}
-        """,
-        "Detailed Analysis": f"""
-        Provide comprehensive resume analysis:
-        - Most suitable profession
-        - 5 key strengths
-        - 3-5 improvement suggestions
-        - Detailed section ratings (Summary, Experience, Education)
-        - ATS compatibility score
-        
-        Resume: {pdf_text}
-        Job Description: {job_description}
-        """,
-        "ATS Optimization": f"""
-        ATS optimization analysis:
-        - Missing keywords
-        - ATS-friendly formatting tips
-        - Keyword optimization suggestions
-        - Job-specific recommendations
-        - Detailed ATS compatibility score
-        
-        Resume: {pdf_text}
-        Job Description: {job_description}
-        """
-    }
-
-    # Get AI response
-    prompt = analysis_prompts.get(analysis_option, analysis_prompts["Quick Scan"])
-    response = get_gemini_output(pdf_text, prompt)
-
-    # Clean up file
-    os.unlink(file_path)
-
-    return JSONResponse(content={"response": response})
-
-# Serve static files for a frontend (if needed)
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
 @app.get("/")
 async def root():
-    return {"message": "Resume Analyzer API is running. Use /analyze or /score endpoints to analyze resumes."}
+    return {"message": "Resume ATS Score Analyzer API is running. Use /ats_analyze endpoint to analyze resumes."}
 
 if __name__ == "__main__":
     import uvicorn

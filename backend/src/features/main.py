@@ -1,16 +1,14 @@
-import os
-import sys
-import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import os
+import sys
 
 # Add the project root directory to Python path
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+project_root = os.path.abspath(os.path.join(
+    os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, project_root)
 
 # Import the feature apps
-from src.features.resume_analyzer.app import app as resume_analyzer_app
-from src.features.ats_score.app import app as ats_score_app
 
 # Initialize the main FastAPI app
 app = FastAPI(
@@ -21,11 +19,7 @@ app = FastAPI(
 
 # Configure CORS
 origins = [
-    "http://localhost",
-    "http://localhost:3000",
-    "http://localhost:5173",  # Vite's default port
-    "http://localhost:8000",
-    "https://yourdomain.com"
+    "*"
 ]
 
 app.add_middleware(
@@ -36,26 +30,41 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount feature routes
-app.mount("/resume", resume_analyzer_app)
-app.mount("/ats", ats_score_app)
+# Set the working directory to 'backend'
+# Get the directory of the script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+print("Script Directory:", script_dir)
+
+# Set the backend directory relative to the script location
+backend_dir = os.path.join(script_dir, "..", "..", "..")
+
+# Change the working directory
+os.chdir(backend_dir)
+
+# Verify the change
+print("Current Working Directory:", os.getcwd())
+
+from src.features.resume_analyzer.app import app as resume_analyzer_app
+from src.features.ats_score.app import app as ats_score_app
+
+# # Mount feature routes with proper prefixes
+app.mount("/api/ats", ats_score_app)
+app.mount("/api/resume", resume_analyzer_app)
 
 # Root endpoint
+
+
 @app.get("/")
 def read_root():
     return {
         "message": "Welcome to Resume Analysis Platform",
         "features": [
-            "/resume/analyze - Resume Analysis",
-            "/ats/score - ATS Scoring"
+            "/api/resume/analyze - Resume Analysis",
+            "/api/ats/score - ATS Scoring"
         ]
     }
 
-# Server configuration for direct running
+
 if __name__ == "__main__":
-    uvicorn.run(
-        "main:app", 
-        host="0.0.0.0", 
-        port=8000,
-        reload=True
-    )
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

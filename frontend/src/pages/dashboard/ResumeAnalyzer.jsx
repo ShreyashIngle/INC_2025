@@ -1,10 +1,13 @@
-import axios from 'axios';
 import { motion } from 'framer-motion';
-import { AlertCircle, CheckCircle, FileText, Upload } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { FileText, Upload, AlertCircle, CheckCircle } from 'lucide-react';
+import axios from 'axios';
 import toast from 'react-hot-toast';
 
 function ResumeAnalyzer() {
+  const [file, setFile] = useState(null);
+  const [fileName, setFileName] = useState('No file chosen');
+  const [jobDescription, setJobDescription] = useState('');
   const [companies, setCompanies] = useState([]);
   const [formData, setFormData] = useState({
     company: '',
@@ -13,8 +16,6 @@ function ResumeAnalyzer() {
     cgpa: '',
     branch: '',
   });
-  const [file, setFile] = useState(null);
-  const [fileName, setFileName] = useState('No file chosen');
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
@@ -28,10 +29,10 @@ function ResumeAnalyzer() {
   const fetchCompanies = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8000/resume/companies', {
+      const response = await axios.get('http://127.0.0.1:8000/api/resume/companies', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setCompanies(response.data.companies);
+      setCompanies(response.data.companies || []);
     } catch (error) {
       console.error('Error fetching companies:', error);
       toast.error('Failed to fetch companies');
@@ -77,15 +78,16 @@ function ResumeAnalyzer() {
     try {
       const token = localStorage.getItem('token');
       const formDataToSend = new FormData();
+      formDataToSend.append('resume', file);
       formDataToSend.append('company', formData.company);
       formDataToSend.append('ssc', formData.ssc);
       formDataToSend.append('hsc', formData.hsc);
       formDataToSend.append('cgpa', formData.cgpa);
       formDataToSend.append('branch', formData.branch);
-      formDataToSend.append('resume', file);
+      formDataToSend.append('job_description', jobDescription);
   
       const response = await axios.post(
-        'http://localhost:8000/resume/analyze',
+        'http://127.0.0.1:8000/api/resume/analyze',
         formDataToSend,
         {
           headers: {
@@ -225,6 +227,19 @@ function ResumeAnalyzer() {
 
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-2">
+                Job Description (Optional)
+              </label>
+              <textarea
+                value={jobDescription}
+                onChange={(e) => setJobDescription(e.target.value)}
+                placeholder="Paste the job description here for better analysis"
+                className="w-full px-4 py-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows="4"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-2">
                 Upload Resume (PDF only)
               </label>
               <div className="flex items-center justify-center w-full">
@@ -331,19 +346,21 @@ function ResumeAnalyzer() {
                 </div>
               </div>
 
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Skills Detected</h3>
-                <div className="flex flex-wrap gap-2">
-                  {result.skills && result.skills.map((skill, index) => (
-                    <span 
-                      key={index} 
-                      className="px-3 py-1 bg-blue-900/30 text-blue-400 rounded-full text-sm"
-                    >
-                      {skill}
-                    </span>
-                  ))}
+              {result.skills && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Skills Detected</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {result.skills.map((skill, index) => (
+                      <span 
+                        key={index} 
+                        className="px-3 py-1 bg-blue-900/30 text-blue-400 rounded-full text-sm"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {result.missing_skills && result.missing_skills.length > 0 && (
                 <div>
@@ -361,6 +378,36 @@ function ResumeAnalyzer() {
                   <p className="mt-2 text-gray-400 text-sm">
                     Consider developing these skills to improve your chances.
                   </p>
+                </div>
+              )}
+
+              {result.experience_domains && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Experience Domains</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {result.experience_domains.map((domain, index) => (
+                      <span 
+                        key={index} 
+                        className="px-3 py-1 bg-green-900/30 text-green-400 rounded-full text-sm"
+                      >
+                        {domain}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {result.academic_details && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Academic Details</h3>
+                  <div className="bg-gray-700/50 rounded-lg p-4">
+                    {Object.entries(result.academic_details).map(([key, value]) => (
+                      <div key={key} className="flex justify-between py-1">
+                        <span className="text-gray-400">{key}:</span>
+                        <span className="font-medium">{value}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

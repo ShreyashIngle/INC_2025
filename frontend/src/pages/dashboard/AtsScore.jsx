@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { FileText, Upload, AlertCircle, CheckCircle } from 'lucide-react';
+import { FileText, Upload, AlertCircle } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
@@ -49,7 +49,7 @@ function AtsScore() {
       formData.append('analysis_option', analysisOption);
 
       const response = await axios.post(
-        'http://localhost:8000/ats-score/ats_analyze',
+        'http://127.0.0.1:8000/api/ats/score',
         formData,
         {
           headers: {
@@ -126,7 +126,7 @@ function AtsScore() {
                 placeholder="Paste the job description here for better analysis"
                 className="w-full px-4 py-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 rows="4"
-              ></textarea>
+              />
             </div>
 
             <div>
