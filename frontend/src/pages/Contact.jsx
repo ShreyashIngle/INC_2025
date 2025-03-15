@@ -62,7 +62,7 @@ function Contact() {
               <Mail className="w-8 h-8 text-blue-500" />
               <div>
                 <h3 className="text-xl font-semibold">Email</h3>
-                <p className="text-gray-300">info@yieldvision.com</p>
+                <p className="text-gray-300">info@prepGenius.com</p>
               </div>
             </div>
           </motion.div>

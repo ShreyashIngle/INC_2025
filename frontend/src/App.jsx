@@ -40,7 +40,7 @@ function App() {
   return (
     <>
       <video autoPlay loop muted>
-        <source src="https://sidcupfamilygolf.com/wp-content/uploads/2023/02/hero.mp4" type="video/mp4" />
+        <source src="./public/video.mp4" type="video/mp4" />
       </video>
       <div ref={mainRef} id="main">
         <Hero />

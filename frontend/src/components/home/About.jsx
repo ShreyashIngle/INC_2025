@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { translations } from '../../utils/translations';
 import image4 from "../../images/image4.jpg";
+import image8 from "../../images/image8.jpg";
 
 function About() {
   const { language } = useLanguage();
@@ -28,9 +29,9 @@ function About() {
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              src="https://eiwgew27fhz.exactdn.com/wp-content/uploads/2023/02/home-about-1-300x200.jpg"
+              src={image8}
               alt={t.images?.alt1}
-              className="rounded-lg shadow-xl"
+              className="rounded-lg shadow-xl h-48 w-full object-cover"
             />
             <motion.img
               initial={{ y: 50, opacity: 0 }}
@@ -38,7 +39,7 @@ function About() {
               transition={{ duration: 0.8, delay: 0.4 }}
               src={image4}
               alt={t.images?.alt2}
-              className="rounded-lg shadow-xl"
+              className="rounded-lg shadow-xl h-48 w-full object-cover"
             />
           </div>
         </motion.div>

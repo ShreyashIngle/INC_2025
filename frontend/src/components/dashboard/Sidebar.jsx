@@ -21,7 +21,7 @@ function Sidebar({ isOpen, setIsOpen }) {
       { icon: Calendar, label: 'Placement Calendar', path: '/dashboard/placement-calendar' },
       { icon: Clock, label: 'Sessions', path: '/dashboard/sessions' },
       { icon: FileText, label: 'Resume Analyzer', path: '/dashboard/resume-analyzer' },
-      { icon: FileCheck, label: 'ATS Score', path: '/dashboard/ats-score' }
+      // { icon: FileCheck, label: 'ATS Score', path: '/dashboard/ats-score' }
     ],
     enterprise: [
       { icon: BookOpen, label: 'DSA Sheet', path: '/dashboard/dsa-sheet' },

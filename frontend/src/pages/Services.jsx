@@ -24,7 +24,7 @@ function Services() {
       icon: Database,
       title: t.analytics.title,
       description: t.analytics.description,
-      image: 'https://images.unsplash.com/photo-1581091226825-c6a89e7e4801?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+      image: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
     }
   ];
 

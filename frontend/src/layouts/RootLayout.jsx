@@ -1,5 +1,4 @@
 import { Outlet } from 'react-router-dom';
-import LanguageToggle from '../components/shared/LanguageToggle';
 import Cursor from '../components/shared/Cursor';
 import Footer from '../components/shared/Footer';
 import Navbar from '../components/shared/Navbar';
@@ -17,7 +16,6 @@ function RootLayout() {
         <Outlet />
       </main>
       <Footer />
-      <LanguageToggle />
     </div>
   );
 }

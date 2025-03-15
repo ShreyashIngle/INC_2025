@@ -1,6 +1,3 @@
-
-
-
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useRef } from 'react';
@@ -41,7 +38,7 @@ function CallToAction() {
               transition={{ duration: 0.5, delay: index * 0.2 }}
               className="group relative overflow-hidden rounded-xl"
             >
-              <div className="aspect-w-16 aspect-h-9 relative">
+              <div className="relative h-64">
                 <img
                   src={item.image}
                   alt={item.title}
@@ -51,14 +48,6 @@ function CallToAction() {
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
                     <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="inline-flex items-center px-6 py-3 bg-blue-500 text-black rounded-full font-semibold hover:bg-blue-400 transition-colors"
-                    >
-                      {t.learnMore}
-                      <ArrowRight className="ml-2" size={20} />
-                    </motion.button>
                   </div>
                 </div>
               </div>
