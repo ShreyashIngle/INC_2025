@@ -14,7 +14,7 @@ function Hero() {
         loop
         muted
         playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-40"
+        className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-80"
       >
         <source
           src="./public/video.mp4"
