@@ -8,8 +8,6 @@ project_root = os.path.abspath(os.path.join(
     os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, project_root)
 
-# Import the feature apps
-
 # Initialize the main FastAPI app
 app = FastAPI(
     title="Resume Analysis Platform",
@@ -46,24 +44,24 @@ print("Current Working Directory:", os.getcwd())
 
 from src.features.resume_analyzer.app import app as resume_analyzer_app
 from src.features.ats_score.app import app as ats_score_app
+from src.features.mcq.app import app as mcq_app
 
-# # Mount feature routes with proper prefixes
+# Mount feature routes with proper prefixes
 app.mount("/api/ats", ats_score_app)
 app.mount("/api/resume", resume_analyzer_app)
+app.mount("/api/mcq", mcq_app)
 
 # Root endpoint
-
-
 @app.get("/")
 def read_root():
     return {
         "message": "Welcome to Resume Analysis Platform",
         "features": [
             "/api/resume/analyze - Resume Analysis",
-            "/api/ats/score - ATS Scoring"
+            "/api/ats/score - ATS Scoring",
+            "/api/mcq - MCQ Generator"
         ]
     }
-
 
 if __name__ == "__main__":
     import uvicorn

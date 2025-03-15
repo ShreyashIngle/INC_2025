@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { BookOpen, Calendar, Clock, FileText, X, FileCheck } from 'lucide-react';
+import { BookOpen, Calendar, Clock, FileText, X, FileCheck, BookOpenCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -7,7 +7,6 @@ import { useLanguage } from '../../contexts/LanguageContext';
 function Sidebar({ isOpen, setIsOpen }) {
   const location = useLocation();
   const { language } = useLanguage();
-  // const t = translations[language].nav;
   const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
@@ -18,14 +17,15 @@ function Sidebar({ isOpen, setIsOpen }) {
   const menuConfig = {
     farmer: [
       { icon: BookOpen, label: 'DSA Sheet', path: '/dashboard/dsa-sheet' },
-
       { icon: FileText, label: 'Resume Analyzer', path: '/dashboard/resume-analyzer' },
-      { icon: FileCheck, label: 'ATS Score', path: '/dashboard/ats-score' }
+      { icon: FileCheck, label: 'ATS Score', path: '/dashboard/ats-score' },
+      { icon: BookOpenCheck, label: 'MCQ Generator', path: '/dashboard/mcq-generator' }
     ],
     enterprise: [
       { icon: BookOpen, label: 'DSA Sheet', path: '/dashboard/dsa-sheet' },
       { icon: Calendar, label: 'Placement Calendar', path: '/dashboard/placement-calendar' },
-      { icon: Clock, label: 'Sessions', path: '/dashboard/sessions' } 
+      { icon: Clock, label: 'Sessions', path: '/dashboard/sessions' },
+      { icon: BookOpenCheck, label: 'MCQ Generator', path: '/dashboard/mcq-generator' }
     ]
   };
 

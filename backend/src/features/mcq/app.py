@@ -11,9 +11,16 @@ from pydantic import BaseModel
 # Initialize FastAPI app
 app = FastAPI()
 
+# Get the absolute path of the current script
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Set the correct path for static files and topics JSON
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+TOPICS_FILE_PATH = os.path.join(STATIC_DIR, "topics_and_subtopics.json")
+
 # Configure templates and static files
-templates = Jinja2Templates(directory="templates")
-app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 # Configure OpenAI client for Azure
 client = AzureOpenAI(
@@ -23,22 +30,51 @@ client = AzureOpenAI(
 )
 
 # Define a Pydantic model for the MCQ request
+
+
 class MCQRequest(BaseModel):
     subject: str
     difficulty: str
     topic: Optional[str] = "NA"
 
-# Load topics and subtopics
+# Ensure the static directory exists and create default topics if needed
+
+
+@app.on_event("startup")
+async def startup_event():
+    os.makedirs(STATIC_DIR, exist_ok=True)
+
+    if not os.path.exists(TOPICS_FILE_PATH):
+        default_topics = {
+            "OS": ["Process Management", "Memory Management", "File Systems", "Deadlocks", "Scheduling Algorithms"],
+            "CN": ["Network Layers", "Routing Algorithms", "TCP/IP", "Network Security", "Wireless Networks"],
+            "DBMS": ["Normalization", "SQL Queries", "Transaction Management", "Indexing", "ACID Properties"],
+            "OOPS": ["Inheritance", "Polymorphism", "Encapsulation", "Abstraction", "Design Patterns"]
+        }
+        with open(TOPICS_FILE_PATH, 'w') as file:
+            json.dump(default_topics, file, indent=4)
+
+# Load topics and subtopics for the dropdown
+
+
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    # Load topics and subtopics for the dropdown
-    with open('static/topics_and_subtopics.json', 'r') as file:
+    if not os.path.exists(TOPICS_FILE_PATH):
+        raise HTTPException(
+            status_code=500, detail=f"File not found: {TOPICS_FILE_PATH}")
+
+    with open(TOPICS_FILE_PATH, 'r') as file:
         topics_data = json.load(file)
+
     return templates.TemplateResponse("index.html", {"request": request, "topics_data": topics_data})
+
 
 @app.post("/generate_mcq")
 async def generate_mcq(request: Request, mcq_request: MCQRequest = None):
-    # For form submissions, extract data from form
+    if not os.path.exists(TOPICS_FILE_PATH):
+        raise HTTPException(
+            status_code=500, detail=f"File not found: {TOPICS_FILE_PATH}")
+
     if not mcq_request:
         form_data = await request.form()
         subject = form_data.get('subject')
@@ -48,29 +84,28 @@ async def generate_mcq(request: Request, mcq_request: MCQRequest = None):
         subject = mcq_request.subject
         difficulty = mcq_request.difficulty
         topic = mcq_request.topic
-    
-    # Load the topics and subtopics
-    with open('static/topics_and_subtopics.json', 'r') as file:
+
+    with open(TOPICS_FILE_PATH, 'r') as file:
         topics_and_subtopics = json.load(file)
-    
-    # Generate MCQs using the OpenAI API
+
     try:
-        mcq_data = generate_mcqs_with_ai(subject, difficulty, topic, topics_and_subtopics)
-        
-        # Parse the JSON response
+        mcq_data = generate_mcqs_with_ai(
+            subject, difficulty, topic, topics_and_subtopics)
+
         if isinstance(mcq_data, str):
             mcq_data = json.loads(mcq_data)
-        
-        # Return JSON response
+
         return mcq_data
     except json.JSONDecodeError:
-        raise HTTPException(status_code=500, detail="Failed to parse AI response")
+        raise HTTPException(
+            status_code=500, detail="Failed to parse AI response")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 def generate_mcqs_with_ai(subject, difficulty, topic, topics_and_subtopics):
     delimiter = "####"
-    
+
     prompt = f"""
     You are an expert educational content creator specializing in Computer Science subjects. Your task is to generate high-quality technical questions based on user specifications.
 
@@ -167,20 +202,15 @@ def generate_mcqs_with_ai(subject, difficulty, topic, topics_and_subtopics):
     "status" should be set as "original" for all the questions.
     {delimiter}
     """
-    
-    # Use the updated OpenAI client API
+
     response = client.chat.completions.create(
-        model="GPT4OAISpeaking",  # Use your deployment name here
-        messages=[
-            {"role": "user", "content": prompt}
-        ],
+        model="GPT4OAISpeaking",
+        messages=[{"role": "user", "content": prompt}],
         temperature=0.0
     )
-    
-    # Extract the content from the response with the updated API
+
     content = response.choices[0].message.content
-    
-    # Optional: Print token usage if your client returns it
+
     try:
         token_dict = {
             'prompt_tokens': response.usage.prompt_tokens,
@@ -190,25 +220,9 @@ def generate_mcqs_with_ai(subject, difficulty, topic, topics_and_subtopics):
         print(f"Prompt Cost: {token_dict}")
     except:
         print("Token usage information not available")
-    
+
     return content
 
-# Ensure the static directory exists and create default topics if needed
-@app.on_event("startup")
-async def startup_event():
-    # Ensure the static directory exists
-    os.makedirs('static', exist_ok=True)
-    
-    # Create a default topics_and_subtopics.json if it doesn't exist
-    if not os.path.exists('static/topics_and_subtopics.json'):
-        default_topics = {
-            "OS": ["Process Management", "Memory Management", "File Systems", "Deadlocks", "Scheduling Algorithms"],
-            "CN": ["Network Layers", "Routing Algorithms", "TCP/IP", "Network Security", "Wireless Networks"],
-            "DBMS": ["Normalization", "SQL Queries", "Transaction Management", "Indexing", "ACID Properties"],
-            "OOPS": ["Inheritance", "Polymorphism", "Encapsulation", "Abstraction", "Design Patterns"]
-        }
-        with open('static/topics_and_subtopics.json', 'w') as file:
-            json.dump(default_topics, file, indent=4)
 
 # Run the application
 if __name__ == '__main__':

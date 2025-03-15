@@ -8,3 +8,4 @@ werkzeug
 google-generativeai
 pyyaml
 logging
+jinja2
