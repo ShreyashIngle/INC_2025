@@ -98,10 +98,10 @@ def load_config(config_path: str = CONFIG) -> dict:
             return yaml.safe_load(file)
     except FileNotFoundError:
         logger.warning(f"Configuration file not found: {config_path}")
-        return {"MODEL": "gemini-pro"}
+        return {"MODEL": "gemini-1.5-pro"}
     except yaml.YAMLError as e:
         logger.error(f"YAML configuration error: {e}")
-        return {"MODEL": "gemini-pro"}
+        return {"MODEL": "gemini-1.5-pro"}
 
 
 
@@ -133,7 +133,7 @@ def extract_pdf_text(file_path: str) -> str:
 
 def parse_resume(text: str, config: dict) -> dict:
     try:
-        model_name = config.get('MODEL', 'gemini-pro')
+        model_name = config.get('MODEL', 'gemini-1.5-pro')
         model = genai.GenerativeModel(model_name)
         prompt = """
         Analyze this resume text and extract:

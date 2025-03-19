@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { BookOpen, Calendar, Clock, FileText, X, FileCheck, BookOpenCheck } from 'lucide-react';
+import { BookOpen, Calendar, Clock, FileText, X, FileCheck, BookOpenCheck, Eye } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -19,7 +19,8 @@ function Sidebar({ isOpen, setIsOpen }) {
       { icon: BookOpen, label: 'DSA Sheet', path: '/dashboard/dsa-sheet' },
       { icon: FileText, label: 'Resume Analyzer', path: '/dashboard/resume-analyzer' },
       { icon: FileCheck, label: 'ATS Score', path: '/dashboard/ats-score' },
-      { icon: BookOpenCheck, label: 'MCQ Generator', path: '/dashboard/mcq-generator' }
+      { icon: BookOpenCheck, label: 'MCQ Generator', path: '/dashboard/mcq-generator' },
+      { icon: Eye, label: 'Eye Tracking', path: '/dashboard/eye-tracking' }
     ],
     enterprise: [
       { icon: BookOpen, label: 'DSA Sheet', path: '/dashboard/dsa-sheet' },

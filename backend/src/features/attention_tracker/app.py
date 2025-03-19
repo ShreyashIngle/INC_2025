@@ -273,7 +273,44 @@ async def stop_session():
     session_active = False
     if cap:
         cap.release()
-    return {"message": "Session stopped"}
+    
+    # Read the log file and return its contents
+    try:
+        with open(log_file, "r", encoding="utf-8") as f:
+            log_contents = f.readlines()
+        
+        # Parse the log to get the final statistics
+        total_entries = len(log_contents)
+        attention_scores = []
+        distracted_count = 0
+        attentive_count = 0
+        final_score = None
+
+        for line in log_contents:
+            if "SESSION ENDED" in line:
+                final_score = float(line.split("Final Attention Score: ")[1].strip("%\n"))
+            elif "Attention Score" in line:
+                score = float(line.split("Attention Score: ")[1].split("%")[0])
+                attention_scores.append(score)
+                if "DISTRACTED" in line:
+                    distracted_count += 1
+                elif "ATTENTIVE" in line:
+                    attentive_count += 1
+
+        avg_score = sum(attention_scores) / len(attention_scores) if attention_scores else 0
+
+        return {
+            "session_log": log_contents,
+            "statistics": {
+                "total_entries": total_entries,
+                "attentive_count": attentive_count,
+                "distracted_count": distracted_count,
+                "average_score": avg_score,
+                "final_score": final_score
+            }
+        }
+    except Exception as e:
+        return {"error": str(e)}
 
 if __name__ == "__main__":
     import uvicorn

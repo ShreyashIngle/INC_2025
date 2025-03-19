@@ -17,6 +17,7 @@ import PlacementCalendar from '../pages/dashboard/PlacementCalendar';
 import ResumeAnalyzer from '../pages/dashboard/ResumeAnalyzer';
 import AtsScore from '../pages/dashboard/AtsScore';
 import McqGenerator from '../pages/dashboard/McqGenerator';
+import EyeTracking from '../pages/dashboard/EyeTracking';
 
 const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'], readOnly = false }) => {
   const token = localStorage.getItem('token');
@@ -70,6 +71,10 @@ export const router = createBrowserRouter([
           {
             path: 'mcq-generator',
             element: <ProtectedRoute allowedRoles={['farmer', 'enterprise']}><McqGenerator /></ProtectedRoute>
+          },
+          {
+            path: 'eye-tracking',
+            element: <ProtectedRoute allowedRoles={['farmer']}><EyeTracking /></ProtectedRoute>
           }
         ]
       },
@@ -86,4 +91,4 @@ export const router = createBrowserRouter([
       { path: 'forgot-password', element: <ForgotPassword /> }
     ]
   }
-]);
+]); 

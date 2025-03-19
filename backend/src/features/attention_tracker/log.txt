@@ -13,3 +13,29 @@
 2025-03-19_01-44-16 - Attention Score: 78.2% - ATTENTIVE
 2025-03-19_01-44-26 - Attention Score: 79.8% - ATTENTIVE
 2025-03-19 01-44-27 - SESSION ENDED - Final Attention Score: 80.0%
+2025-03-19_19-43-40 - Attention Score: 80.3% - ATTENTIVE
+2025-03-19_19-43-50 - Attention Score: 90.5% - ATTENTIVE
+2025-03-19_19-43-58 - Attention Score: 96.0% - ATTENTIVE
+2025-03-19_19-44-00 - Attention Score: 91.2% - ATTENTIVE
+2025-03-19_19-44-08 - Attention Score: 94.0% - ATTENTIVE
+2025-03-19_19-44-10 - Attention Score: 93.3% - ATTENTIVE
+2025-03-19_19-44-18 - Attention Score: 95.7% - ATTENTIVE
+2025-03-19_19-44-20 - Attention Score: 94.3% - ATTENTIVE
+2025-03-19 19-44-21 - SESSION ENDED - Final Attention Score: 93.5%
+2025-03-19 19-44-21 - SESSION ENDED - Final Attention Score: 94.3%
+2025-03-19 19-44-21 - SESSION ENDED - Final Attention Score: 96.0%
+2025-03-19_19-45-12 - Attention Score: 96.9% - ATTENTIVE
+2025-03-19_19-45-22 - Attention Score: 98.3% - ATTENTIVE
+2025-03-19_19-45-32 - Attention Score: 95.7% - ATTENTIVE
+2025-03-19 19-45-35 - SESSION ENDED - Final Attention Score: 96.2%
+2025-03-19_19-47-06 - Attention Score: 96.5% - ATTENTIVE
+2025-03-19_19-47-16 - Attention Score: 98.3% - ATTENTIVE
+2025-03-19_19-47-24 - Attention Score: 96.0% - ATTENTIVE
+2025-03-19_19-47-26 - Attention Score: 98.8% - ATTENTIVE
+2025-03-19 19-47-32 - SESSION ENDED - Final Attention Score: 99.0%
+2025-03-19 19-47-32 - SESSION ENDED - Final Attention Score: 97.8%
+2025-03-19_19-53-25 - Attention Score: 74.9% - DISTRACTED
+2025-03-19_19-53-35 - Attention Score: 77.4% - ATTENTIVE
+2025-03-19_19-53-45 - Attention Score: 85.0% - ATTENTIVE
+2025-03-19_19-53-55 - Attention Score: 89.0% - ATTENTIVE
+2025-03-19 19-54-05 - SESSION ENDED - Final Attention Score: 91.1%

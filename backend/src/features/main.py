@@ -45,11 +45,13 @@ print("Current Working Directory:", os.getcwd())
 from src.features.resume_analyzer.app import app as resume_analyzer_app
 from src.features.ats_score.app import app as ats_score_app
 from src.features.mcq.app import app as mcq_app
+from src.features.attention_tracker.app import app as attention_tracker_app
 
 # Mount feature routes with proper prefixes
 app.mount("/api/ats", ats_score_app)
 app.mount("/api/resume", resume_analyzer_app)
 app.mount("/api/mcq", mcq_app)
+app.mount("/api/attention", attention_tracker_app)
 
 # Root endpoint
 @app.get("/")
@@ -59,7 +61,8 @@ def read_root():
         "features": [
             "/api/resume/analyze - Resume Analysis",
             "/api/ats/score - ATS Scoring",
-            "/api/mcq - MCQ Generator"
+            "/api/mcq - MCQ Generator",
+            "/api/attention - Attention Tracking"
         ]
     }
 
