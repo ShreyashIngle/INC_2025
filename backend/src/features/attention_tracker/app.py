@@ -204,7 +204,7 @@ def process_frame(frame, face_landmarks, total_frames, attention_frames, attenti
     frame = draw_debug_info(frame, debug_info)
     
     current_time = time.time()
-    if current_time - last_log_time > 10:  # Changed to 10 seconds
+    if current_time - last_log_time > 2:  # Changed to 10 seconds
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         with open(log_file, "a", encoding="utf-8") as f:
             f.write(f"{timestamp} - Attention Score: {attention_score:.1f}% - {status}\n")
