@@ -18,6 +18,7 @@ import ResumeAnalyzer from '../pages/dashboard/ResumeAnalyzer';
 import AtsScore from '../pages/dashboard/AtsScore';
 import McqGenerator from '../pages/dashboard/McqGenerator';
 import EyeTracking from '../pages/dashboard/EyeTracking';
+import InterviewBot from '../pages/dashboard/InterviewBot';
 
 const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'], readOnly = false }) => {
   const token = localStorage.getItem('token');
@@ -75,6 +76,10 @@ export const router = createBrowserRouter([
           {
             path: 'eye-tracking',
             element: <ProtectedRoute allowedRoles={['farmer']}><EyeTracking /></ProtectedRoute>
+          },
+          {
+            path: 'interview-bot',
+            element: <ProtectedRoute allowedRoles={['farmer']}><InterviewBot /></ProtectedRoute>
           }
         ]
       },
@@ -91,4 +96,4 @@ export const router = createBrowserRouter([
       { path: 'forgot-password', element: <ForgotPassword /> }
     ]
   }
-]); 
+]);

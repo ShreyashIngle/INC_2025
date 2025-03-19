@@ -4,8 +4,8 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import regex as re
 from pydantic import BaseModel
-from utils.tts import text_to_speech
-from utils.speechtotext import transcribe
+from src.features.interview_bot.utils.tts import text_to_speech
+from src.features.interview_bot.utils.speechtotext import transcribe
 
 load_dotenv(".env")
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])

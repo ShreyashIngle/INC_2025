@@ -8,11 +8,12 @@ import cv2
 import numpy as np
 import base64
 
-from models.interviewbot import InterviewBot, CandidateInfo
-from models.face_mesh_detector import get_eye_contact_ratio
-from models.emotion_recognition import get_facial_expression_score
-from models.head_movement_tracker import detect_head_movement
-from utils.confidence_calculator import calculate_confidence
+from src.features.interview_bot.models.interviewbot import InterviewBot, CandidateInfo
+
+from src.features.interview_bot.models.face_mesh_detector import get_eye_contact_ratio
+from src.features.interview_bot.models.emotion_recognition import get_facial_expression_score
+from src.features.interview_bot.models.head_movement_tracker import detect_head_movement
+from src.features.interview_bot.utils.confidence_calculator import calculate_confidence
 
 app = FastAPI()
 UPLOAD_DIR = "uploads"
